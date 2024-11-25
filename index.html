@@ -160,29 +160,29 @@
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">ServerManagerCmd</span> -<span class="title">i</span> <span class="title">AD</span>-<span class="title">Domain</span>-<span class="title">Services</span>（<span class="title">winserver</span> 2008）</span></span><br></pre></td></tr></table></figure>
 
 <p>接着将之前获取到文件放到跟目标机器一样的目录中。比如我之前是在C:\Windows\NTDS中获取的文件，那么就需要将之前获取的文件放到虚拟机的C:\windows\ntds目录</p>
-<p><img src="/%5Cimages%5C1.png" alt="1"></p>
+<p><img src="/images/1.png" alt="1"></p>
 <h3 id="修复NTDS文件"><a href="#修复NTDS文件" class="headerlink" title="修复NTDS文件"></a>修复NTDS文件</h3><p>尝试恢复ntds数据库</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">r</span> <span class="title">edb</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/%5Cimages%5C2.png" alt="2"></p>
+<p><img src="/images/2.png" alt="2"></p>
 <p>检查ntds.dit的完整性</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">g</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/%5Cimages%5C3.png" alt="3"></p>
+<p><img src="/images/3.png" alt="3"></p>
 <p>如果结果如上图所示是Intergrity check successful那么就可以直接启动ldap服务了，如果返回的是失败的话就执行下面的命令对ntds.dit进行修复</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">p</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
 
 <h3 id="启动ldap服务"><a href="#启动ldap服务" class="headerlink" title="启动ldap服务"></a>启动ldap服务</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">dsamain</span> /<span class="title">dbpath</span> <span class="title">ntds.dit</span> /<span class="title">ldapport</span> 389 /<span class="title">allownonadminaccess</span> /<span class="title">allowupgrade</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/%5Cimages%5C5.png" alt="Screenshot 2024-11-25 172048"></p>
+<p><img src="/images/5.png" alt="5"></p>
 <h3 id="通过ldap服务收集数据"><a href="#通过ldap服务收集数据" class="headerlink" title="通过ldap服务收集数据"></a>通过ldap服务收集数据</h3><p>曾经有人说很鄙视用工具的人，那工具发明出来是干什么的？就喜欢当原始人是吧？我问他那用什么分析，他说用ADExplorer😅</p>
 <h4 id="通过PowerView-py查询"><a href="#通过PowerView-py查询" class="headerlink" title="通过PowerView.py查询"></a>通过PowerView.py查询</h4><p>注释powerview.py的第87行 #self.flatName &#x3D; self.ldap_server.info.other[“ldapServiceName”][0].split(“@”)[-1].split(“.”)[0]</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ powerview ./administrator:ThisisPassw0rd@192.168.116.154 --use-ldap -p 389</span><br><span class="line">$ Get-DomainUser -Where <span class="string">&#x27;userAccountControl contains TRUSTED_FOR_DELEGATION&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/%5Cimages%5C6.png" alt="image-20241125184042955"></p>
+<p><img src="/images/6.png" alt="6"></p>
 <h4 id="通过netexec进行查询"><a href="#通过netexec进行查询" class="headerlink" title="通过netexec进行查询"></a>通过netexec进行查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netexec ldap 192.168.116.154 -u administrator -p ThisisPassw0rd --query <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=user)(objectCategory=person))&quot;</span> <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/%5Cimages%5C7.png" alt="image-20241125184505776"></p>
+<p><img src="/images/7.png" alt="7"></p>
 <h4 id="还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。"><a href="#还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。" class="headerlink" title="还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。"></a>还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。</h4>
 	
 	</div>
