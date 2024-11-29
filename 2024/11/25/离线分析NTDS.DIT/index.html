@@ -6,18 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>内网渗透技巧 | ShadowMccc&#39;s Blog</title>
+  <title>离线分析NTDS.DIT | ShadowMccc&#39;s Blog</title>
   <meta name="author" content="ShadowMccc">
   
-  <meta name="description" content="记录一下平时用到的内网渗透的小技巧
-本地分析NTDS曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）
+  <meta name="description" content="曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）
 获取NTDS和日志通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例
-12C:\&amp;gt; cmd /c &amp;quot">
+12C:\&amp;gt; cmd /c &amp;quot;copy \\?\GLOBALROOT\Devic">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="内网渗透技巧"/>
+  <meta property="og:title" content="离线分析NTDS.DIT"/>
   <meta property="og:site_name" content="ShadowMccc&#39;s Blog"/>
 
   
@@ -117,7 +116,7 @@
 
 	
 		<div class="page-header">
-			<h1> 内网渗透技巧</h1>
+			<h1> 离线分析NTDS.DIT</h1>
 		</div>
 	
 
@@ -134,8 +133,7 @@
 	<div class="mypage">		
 	  		
 
-	  <p>记录一下平时用到的内网渗透的小技巧</p>
-<h2 id="本地分析NTDS"><a href="#本地分析NTDS" class="headerlink" title="本地分析NTDS"></a>本地分析NTDS</h2><p>曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）</p>
+	  <p>曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）</p>
 <h3 id="获取NTDS和日志"><a href="#获取NTDS和日志" class="headerlink" title="获取NTDS和日志"></a>获取NTDS和日志</h3><p>通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">cmd</span> /<span class="title">c</span> &quot;<span class="title">copy</span> \\?\<span class="title">GLOBALROOT</span>\<span class="title">Device</span>\<span class="title">HarddiskVolumeShadowCopy1</span>\<span class="title">Windows</span>\<span class="title">NTDS</span>\ <span class="title">C</span>:\<span class="title">NTDS</span>\&quot;</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">C</span>:\7<span class="title">z.exe</span> <span class="title">a</span> <span class="title">C</span>:\<span class="title">ntds.zip</span> <span class="title">C</span>:\<span class="title">NTDS</span>\</span></span><br></pre></td></tr></table></figure>
 
@@ -180,6 +178,17 @@
   	<center>
 
 	<div class="pagination">
+
+    
+    
+    <a href="/2024/11/29/离线解密浏览器账号密码/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+    
 
     
 </div>
