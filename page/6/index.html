@@ -6,17 +6,13 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>离线分析NTDS.DIT | ShadowMccc&#39;s Blog</title>
+  <title>Page 6 | ShadowMccc&#39;s Blog</title>
   <meta name="author" content="ShadowMccc">
-  
-  <meta name="description" content="曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）
-获取NTDS和日志通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例
-12C:\&amp;gt; cmd /c &amp;quot;copy \\?\GLOBALROOT\Devic">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="离线分析NTDS.DIT"/>
+  
   <meta property="og:site_name" content="ShadowMccc&#39;s Blog"/>
 
   
@@ -111,38 +107,62 @@
 
   <div class="container">
   	<div class="content">
-    	 
+    	 <div class="page-header logo">
+  <h1>ShadowMccc&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
 
+<div class="row page">
 
 	
-		<div class="page-header">
-			<h1> 离线分析NTDS.DIT</h1>
-		</div>
-	
-
-
-
-<div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
 	<div class="col-md-9">
 	
 
-	<!-- content -->
-	<div class="mypage">		
-	  		
+		<div class="slogan">
 
-	  <p>曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）</p>
-<h3 id="获取NTDS和日志"><a href="#获取NTDS和日志" class="headerlink" title="获取NTDS和日志"></a>获取NTDS和日志</h3><p>通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例</p>
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		Beneath this mask there is more than fIesh.Beneath this mask there is an idea, Mr. Creedy.And ideas are bulletproof.
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/11/25/AD-离线分析NTDS.DIT/" >AD-离线分析NTDS.DIT</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-11-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）</p>
+<h1><span id="获取ntds和日志">获取NTDS和日志</span></h1><p>通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">cmd</span> /<span class="title">c</span> &quot;<span class="title">copy</span> \\?\<span class="title">GLOBALROOT</span>\<span class="title">Device</span>\<span class="title">HarddiskVolumeShadowCopy1</span>\<span class="title">Windows</span>\<span class="title">NTDS</span>\ <span class="title">C</span>:\<span class="title">NTDS</span>\&quot;</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">C</span>:\7<span class="title">z.exe</span> <span class="title">a</span> <span class="title">C</span>:\<span class="title">ntds.zip</span> <span class="title">C</span>:\<span class="title">NTDS</span>\</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="本地环境配置"><a href="#本地环境配置" class="headerlink" title="本地环境配置"></a>本地环境配置</h3><p>根据目标机器的系统版本安装对应的版本的系统的虚拟机，安装完成后给该虚拟机安装AD DS角色</p>
+<h1><span id="本地环境配置">本地环境配置</span></h1><p>根据目标机器的系统版本安装对应的版本的系统的虚拟机，安装完成后给该虚拟机安装AD DS角色（注意！如果使用Vmware请关闭VBS，不然在winserver2012及以上由于生成ID不同会导致无法启动ldap服务）</p>
+<p>关闭脚本的链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.microsoft.com/en-my/download/details.aspx?id=53337">https://www.microsoft.com/en-my/download/details.aspx?id=53337</a></p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">ServerManagerCmd</span> -<span class="title">i</span> <span class="title">AD</span>-<span class="title">Domain</span>-<span class="title">Services</span>（<span class="title">winserver</span> 2008）</span></span><br></pre></td></tr></table></figure>
 
 <p>接着将之前获取到文件放到跟目标机器一样的目录中。比如我之前是在C:\Windows\NTDS中获取的文件，那么就需要将之前获取的文件放到虚拟机的C:\windows\ntds目录</p>
 <p><img src="/images/1.png" alt="1"></p>
-<h3 id="修复NTDS文件"><a href="#修复NTDS文件" class="headerlink" title="修复NTDS文件"></a>修复NTDS文件</h3><p>尝试恢复ntds数据库</p>
+<h1><span id="修复ntds文件">修复NTDS文件</span></h1><p>尝试恢复ntds数据库</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">r</span> <span class="title">edb</span></span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/2.png" alt="2"></p>
@@ -153,105 +173,118 @@
 <p>如果结果如上图所示是Intergrity check successful那么就可以直接启动ldap服务了，如果返回的是失败的话就执行下面的命令对ntds.dit进行修复</p>
 <figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">p</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
 
-<h3 id="启动ldap服务"><a href="#启动ldap服务" class="headerlink" title="启动ldap服务"></a>启动ldap服务</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">dsamain</span> /<span class="title">dbpath</span> <span class="title">ntds.dit</span> /<span class="title">ldapport</span> 389 /<span class="title">allownonadminaccess</span> /<span class="title">allowupgrade</span></span></span><br></pre></td></tr></table></figure>
+<h2><span id="启动ldap服务">启动ldap服务</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">dsamain</span> /<span class="title">dbpath</span> <span class="title">ntds.dit</span> /<span class="title">ldapport</span> 389 /<span class="title">allownonadminaccess</span> /<span class="title">allowupgrade</span></span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/5.png" alt="5"></p>
-<h3 id="通过ldap服务收集数据"><a href="#通过ldap服务收集数据" class="headerlink" title="通过ldap服务收集数据"></a>通过ldap服务收集数据</h3><p>曾经有人说很鄙视用工具的人，那工具发明出来是干什么的？就喜欢当原始人是吧？我问他那用什么分析，他说用ADExplorer😅</p>
-<h4 id="通过PowerView-py查询"><a href="#通过PowerView-py查询" class="headerlink" title="通过PowerView.py查询"></a>通过PowerView.py查询</h4><p>注释powerview.py的第87行 #self.flatName &#x3D; self.ldap_server.info.other[“ldapServiceName”][0].split(“@”)[-1].split(“.”)[0]</p>
+<h3><span id="通过ldap服务收集数据">通过ldap服务收集数据</span></h3><p>曾经有人说很鄙视用工具的人，那工具发明出来是干什么的？就喜欢当原始人是吧？我问他那用什么分析，他说用ADExplorer😅</p>
+<h4><span id="通过powerviewpy查询">通过PowerView.py查询</span></h4><p>注释powerview.py的第87行 #self.flatName &#x3D; self.ldap_server.info.other[“ldapServiceName”][0].split(“@”)[-1].split(“.”)[0]</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ powerview ./administrator:ThisisPassw0rd@192.168.116.154 --use-ldap -p 389</span><br><span class="line">$ Get-DomainUser -Where <span class="string">&#x27;userAccountControl contains TRUSTED_FOR_DELEGATION&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/6.png" alt="6"></p>
-<h4 id="通过netexec进行查询"><a href="#通过netexec进行查询" class="headerlink" title="通过netexec进行查询"></a>通过netexec进行查询</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netexec ldap 192.168.116.154 -u administrator -p ThisisPassw0rd --query <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=user)(objectCategory=person))&quot;</span> <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h4><span id="通过netexec进行查询">通过netexec进行查询</span></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netexec ldap 192.168.116.154 -u administrator -p ThisisPassw0rd --query <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=user)(objectCategory=person))&quot;</span> <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/7.png" alt="7"></p>
-<h4 id="还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。"><a href="#还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。" class="headerlink" title="还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。"></a>还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。</h4>
-	  <div class="article-footer-copyright">
-
-    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+<h4><span id="还可以通过ldapdomaindumpadexplorer进行收集等等">还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。</span></h4>
+	
+	</div>
+  <a type="button" href="/2024/11/25/AD-离线分析NTDS.DIT/#more" class="btn btn-default more">Read More</a>
 </div>
 
-	</div>
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/5/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+          <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
 
 	
+		<div class="col-md-3">
+	<div id="sidebar">
 	
-	<div>
-  	<center>
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
 
-	<div class="pagination">
 
-    
-    
-    <a href="/2024/11/29/离线解密浏览器账号密码/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
-    
+		
+			
+		
+			
 
-    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
     
-    <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+      <li>
+        <a href="/2024/12/10/OffensiveWindows攻击平台搭建/" ><i class="fa fa-file-o"></i>OffensiveWindows攻击平台搭建</a>
+      </li>
     
+      <li>
+        <a href="/2024/12/03/AD-NTLM Relay/" ><i class="fa fa-file-o"></i>AD-NTLM Relay</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/01/AD-滥用DACL/" ><i class="fa fa-file-o"></i>AD-滥用DACL</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/01/AD-kerberos中的委派/" ><i class="fa fa-file-o"></i>AD-Kerberos中的委派</a>
+      </li>
+    
+      <li>
+        <a href="/2024/11/29/解密chrome浏览器账号密码/" ><i class="fa fa-file-o"></i>解密chrome浏览器账号密码</a>
+      </li>
+    
+  </ul>
+</div>
 
-    
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" title="" target="_blank"]);">hexo-theme-bithack</a></li>
+	
+	</ul>
 </div>
 
 
-    </center>
-	</div>
-	
-	<!-- comment -->
-	<!--
-<section id="comment">
-    <h2 class="title">Comments</h2>
-
-    
-</section>
-
--->
-	
-	
-	
-	</div> <!-- col-md-9/col-md-12 -->
-
-
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
-
-	<!-- date -->
-	
-	<div class="meta-widget">
-	<i class="fa fa-clock-o"></i>
-	2024-11-25 
-	</div>
-	
-
-	<!-- categories -->
-    
-
-	<!-- tags -->
 		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
 
-	<!-- toc -->
-	<div class="meta-widget">
 	
-	</div>
 	
-    <hr>
-	
-</div><!-- col-md-3 -->
-
-		
-
-	</div>
-	
-		
-
-</div><!-- row -->
-
-<!--
- -->
-
-
-
+</div> <!-- row-fluid -->
 	</div>
   </div>
   <div class="container-narrow">

