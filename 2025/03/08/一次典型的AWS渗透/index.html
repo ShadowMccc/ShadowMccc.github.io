@@ -6,13 +6,16 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>ShadowMccc&#39;s Blog</title>
+  <title>一次典型的AWS渗透 | ShadowMccc&#39;s Blog</title>
   <meta name="author" content="ShadowMccc">
+  
+  <meta name="description" content="metadata（Cloud SSRF，在启用了metadataV1版本的情况下）首先通过某种方式控制了一台EC2机器，通过获取metadata发现该机器绑定了IAM角色，通过metadata获取session token
+查看是否绑定了IAM角色1curl http://169.254.169.2">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="一次典型的AWS渗透"/>
   <meta property="og:site_name" content="ShadowMccc&#39;s Blog"/>
 
   
@@ -83,51 +86,29 @@
 
   <div class="container">
   	<div class="content">
-    	 <div class="page-header logo">
-  <h1>ShadowMccc&#39;s Blog<span class="blink-fast">|</span></h1>
-</div>
+    	 
 
-<div class="row page">
 
 	
+		<div class="page-header">
+			<h1> 一次典型的AWS渗透</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
 	<div class="col-md-9">
 	
 
-		<div class="slogan">
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-		<i class="fa fa-heart blink-slow"></i>
-
-		Beneath this mask there is more than fIesh.Beneath this mask there is an idea, Mr. Creedy.And ideas are bulletproof.
-
-</div>    
-
-		<div id="top_search"></div>
-		<div class="mypage">
-		
-		<!-- title and entry -->
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2025/03/08/一次典型的AWS渗透/" >一次典型的AWS渗透</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2025-03-08  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h1><span id="metadatacloud-ssrf在启用了metadatav1版本的情况下">metadata（Cloud SSRF，在启用了metadataV1版本的情况下）</span></h1><p>首先通过某种方式控制了一台EC2机器，通过获取metadata发现该机器绑定了IAM角色，通过metadata获取session token</p>
+	  <h1><span id="metadatacloud-ssrf在启用了metadatav1版本的情况下">metadata（Cloud SSRF，在启用了metadataV1版本的情况下）</span></h1><p>首先通过某种方式控制了一台EC2机器，通过获取metadata发现该机器绑定了IAM角色，通过metadata获取session token</p>
 <h2><span id="查看是否绑定了iam角色">查看是否绑定了IAM角色</span></h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http://169.254.169.254/latest/meta-data</span><br></pre></td></tr></table></figure>
 
 <p><img src="/images/110.png" alt="110"></p>
@@ -167,91 +148,93 @@
 <p><img src="/images/119.png" alt="119"></p>
 <p>接下来就是重复之前的操作进行提权，不想写了，权限维持什么的去cloud.hacktricks.xyz上看吧</p>
 
+	  <div class="article-footer-copyright">
+
+    本博客采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议(CC BY-NC-SA 4.0) 发布.</a>
+</div>
+
+	</div>
+
+	
+	
+	<div>
+  	<center>
+
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2024/12/25/o365 & Azure-GoldenSAML/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	<!--
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+-->
+	
+	
+	
+	</div> <!-- col-md-9/col-md-12 -->
+
+
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2025-03-08 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
 	
 	</div>
-  <a type="button" href="/2025/03/08/一次典型的AWS渗透/#more" class="btn btn-default more">Read More</a>
-</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
 
 		
 
-		</div>
-
-		<!-- pagination -->
-		<div>
-  		<center>
-		<div class="pagination">
-
-   
-    
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
-        
-
-        <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
- 
-       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
-        
-
-  
-</div>
-
-  		</center>
-		</div>
-
+	</div>
+	
 		
-		
-	</div> <!-- col-md-9 -->
 
-	
-		<div class="col-md-3">
-	<div id="sidebar">
-	
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
-    
-      <li>
-        <a href="/2025/03/08/一次典型的AWS渗透/" ><i class="fa fa-file-o"></i>一次典型的AWS渗透</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/25/o365 &amp; Azure-GoldenSAML/" ><i class="fa fa-file-o"></i>o365 &amp; Azure-GoldenSAML</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/20/C2基础设施搭建/" ><i class="fa fa-file-o"></i>C2基础设施搭建</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/10/OffensiveWindows攻击平台搭建/" ><i class="fa fa-file-o"></i>OffensiveWindows攻击平台搭建</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/03/AD-NTLM Relay/" ><i class="fa fa-file-o"></i>AD-NTLM Relay</a>
-      </li>
-    
-  </ul>
-</div>
+</div><!-- row -->
 
-		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
-	
-		<li><i class="false"></i><a href="https://github.com/Ares-X/hexo-theme-freemind.bithack" title="" target="_blank"]);">hexo-theme-bithack</a></li>
-	
-	</ul>
-</div>
+<!--
+ -->
 
 
-		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
 
-	
-	
-</div> <!-- row-fluid -->
 	</div>
   </div>
   <div class="container-narrow">

